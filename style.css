@@ -1,0 +1,2820 @@
+/* ==========================================================================
+   Virtual Hydraulic & Electrical Laboratory - CTUT Stylesheet
+   Modern Industrial Design with High Fidelity Hardware Modules
+   ========================================================================== */
+
+:root {
+  --primary: #0077b6;
+  --primary-dark: #023e8a;
+  --primary-light: #48cae4;
+  --accent: #e63946;
+  --accent-green: #2a9d8f;
+  --accent-amber: #e76f51;
+  --bg-dark: #0f172a;
+  --bg-panel: #1e293b;
+  --bg-card: #273549;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --aluminum-base: #cfd8dc;
+  --aluminum-line: #90a4ae;
+  --aluminum-shadow: #78909c;
+  --module-faceplate: #f8f6f0;
+  --module-border: #b0bec5;
+  --jack-brass: #f4a261;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.15);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.25);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.4);
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Header Bar
+   ========================================================================== */
+.main-header {
+  background: #111827;
+  border-bottom: 2px solid #1f2937;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+.header-left .logo-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-badge {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.4);
+}
+
+.logo-text h1 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #f3f4f6;
+}
+
+.logo-text p {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.lab-selector-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1f2937;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+}
+
+.lab-selector-wrapper label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #93c5fd;
+  text-transform: uppercase;
+}
+
+.lab-selector-wrapper select {
+  background: #111827;
+  color: #f9fafb;
+  border: 1px solid #4b5563;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mode-toggles {
+  display: flex;
+  background: #1f2937;
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.mode-btn.active {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+}
+
+.system-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1f2937;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: 1px solid #374151;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  transition: all 0.3s ease;
+}
+
+.status-dot.active {
+  background: #3b82f6;
+  box-shadow: 0 0 10px #3b82f6;
+  animation: pulse 1s infinite alternate;
+}
+
+.status-dot.error {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+}
+
+@keyframes pulse {
+  from { opacity: 0.6; }
+  to { opacity: 1; transform: scale(1.15); }
+}
+
+/* ==========================================================================
+   Main Workspace Layout
+   ========================================================================== */
+.workspace {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 48px);
+  overflow: hidden;
+}
+
+/* Sidebar Panel */
+.sidebar-panel {
+  width: 270px;
+  min-width: 270px;
+  max-width: 270px;
+  background: #111827;
+  border-right: 1px solid #1f2937;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 10px;
+  padding: 10px;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease;
+  position: relative;
+  z-index: 80;
+}
+
+.sidebar-panel.collapsed {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-right: none !important;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sidebar-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 4px 6px 4px;
+  border-bottom: 1px solid #374151;
+}
+
+.sidebar-title {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-close-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #38bdf8;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sidebar-close-btn:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.panel-section {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #e5e7eb;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section-desc {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+/* Action Buttons Grid */
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.btn {
+  padding: 9px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0369a1, #075985);
+}
+
+.btn-secondary {
+  background: #374151;
+  color: #f3f4f6;
+  border: 1px solid #4b5563;
+}
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+.btn-outline-danger {
+  background: transparent;
+  color: #f87171;
+  border: 1px solid #ef4444;
+}
+.btn-outline-danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.btn-ghost {
+  background: #111827;
+  color: #d1d5db;
+  border: 1px solid #374151;
+}
+.btn-ghost:hover {
+  background: #1f2937;
+}
+
+/* Wire Palette */
+.wire-colors-picker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.color-btn {
+  background: #111827;
+  border: 1px solid #374151;
+  color: #e5e7eb;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.color-btn .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 6px var(--c);
+}
+
+.color-btn.active {
+  border-color: var(--c);
+  background: rgba(255,255,255,0.06);
+  box-shadow: inset 0 0 0 1px var(--c);
+}
+
+.wire-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #374151;
+}
+
+.wire-help-hint {
+  color: #f59e0b;
+}
+
+/* Lab description */
+.lab-description ul {
+  padding-left: 18px;
+  font-size: 12px;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+.lab-description li {
+  margin-bottom: 6px;
+}
+.lab-description code {
+  background: #111827;
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* Schematics card */
+.schematic-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.schematic-tab-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.sub-tab-btn {
+  background: #111827;
+  color: #9ca3af;
+  border: 1px solid #374151;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sub-tab-btn.active {
+  background: #0284c7;
+  color: #fff;
+  border-color: #0284c7;
+}
+
+.schematic-container {
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 8px;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
+}
+
+.schematic-view {
+  display: none;
+  width: 100%;
+}
+
+.schematic-view.active {
+  display: block;
+}
+
+.schematic-svg {
+  width: 100%;
+  height: auto;
+  max-height: 250px;
+}
+
+/* Diagnostic Box */
+.diagnostic-box {
+  background: #111827;
+  border-radius: 6px;
+  padding: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  min-height: 80px;
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log-item {
+  line-height: 1.4;
+}
+.log-item.info { color: #60a5fa; }
+.log-item.success { color: #34d399; font-weight: 600; }
+.log-item.warn { color: #fbbf24; }
+.log-item.error { color: #f87171; font-weight: 600; }
+
+/* ==========================================================================
+   Workbench Main Area (Interactive Virtual Laboratory)
+   ========================================================================== */
+.workbench-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #18202f;
+  position: relative;
+  overflow: hidden;
+}
+
+.workbench-top-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  padding: 6px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  z-index: 70;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-toggle-panel {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #38bdf8;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 11px;
+}
+
+.btn-toggle-panel:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.badge-lab {
+  background: #1e3a8a;
+  color: #bfdbfe;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* Quick Wire Color Palette on Topbar */
+.topbar-wire-palette {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #1e293b;
+  padding: 3px 8px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+}
+
+.palette-lbl {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 2px;
+}
+
+.topbar-color-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #0f172a;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.topbar-color-btn .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 6px var(--c);
+}
+
+.topbar-color-btn .kbd-hint {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  background: #334155;
+  color: #f1f5f9;
+  padding: 0 4px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+.topbar-color-btn:hover {
+  background: #1e293b;
+  border-color: #64748b;
+  color: #fff;
+}
+
+.topbar-color-btn.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #fff;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zoom-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #1e293b;
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid #334155;
+}
+
+.zoom-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #38bdf8;
+  min-width: 42px;
+  text-align: center;
+  padding: 0 4px;
+}
+
+.ctrl-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ctrl-btn:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.ctrl-btn.icon-btn {
+  padding: 4px 7px;
+  font-size: 11px;
+}
+
+.ctrl-btn.active-fit {
+  background: #0284c7;
+  color: #fff;
+  border-color: #0284c7;
+  font-weight: 700;
+}
+
+.topbar-actions-group {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-action-accent {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+}
+
+.btn-action-accent:hover {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+}
+
+.btn-action-primary {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+}
+
+.btn-action-primary:hover {
+  background: linear-gradient(135deg, #0369a1, #075985);
+}
+
+/* Bench Viewport & Zoom Wrapper */
+.bench-viewport {
+  flex: 1;
+  position: relative;
+  overflow: auto;
+  background: radial-gradient(circle at 50% 30%, #2e384d, #1a2233);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 8px;
+}
+
+.bench-zoom-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  transition: width 0.15s ease, height 0.15s ease;
+}
+
+/* SVG Overlay for Patch Cord Cables inside the hardware panel */
+.cables-svg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.cables-svg-layer path {
+  pointer-events: stroke;
+  cursor: pointer;
+  transition: stroke-width 0.15s ease;
+}
+
+.cables-svg-layer path:hover {
+  stroke-width: 8px !important;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* Hardware Rig Layout (Tightened Proportions) */
+.bench-hardware-layout {
+  position: relative;
+  width: 1260px;
+  background: #cfd8dc;
+  border: 3px solid #78909c;
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.45);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 8px;
+  transform-origin: top center;
+  transition: transform 0.15s ease-out;
+}
+
+/* Aluminum Profile Racks */
+.rack-row {
+  position: relative;
+  background: #eceff1;
+  border: 2px solid #b0bec5;
+  border-radius: 8px;
+  padding: 6px;
+}
+
+.electrical-rack {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 310px;
+  background: linear-gradient(to bottom, #dbe2e6 0%, #b0bec5 50%, #dbe2e6 100%);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.rack-frame-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: #78909c;
+  border: 1px solid #546e7a;
+}
+.top-rail { top: -4px; }
+.bottom-rail { bottom: -4px; }
+
+/* --------------------------------------------------------------------------
+   Hardware Modules Faceplates (Cream/White Aluminum Panels - TPA Standard)
+   -------------------------------------------------------------------------- */
+.hardware-module {
+  background: var(--module-faceplate);
+  border: 2px solid #9e9e9e;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px;
+  position: relative;
+  min-height: 295px;
+}
+
+.module-header {
+  border-bottom: 2px solid #37474f;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.module-header .brand {
+  font-size: 15px;
+  font-weight: 900;
+  color: #1a237e;
+  letter-spacing: 1.5px;
+  font-style: italic;
+}
+
+.module-header .title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #212121;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   VCC (+V) & GND (-V) Standard Bus Rails
+   ========================================================================== */
+.bus-rail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  position: relative;
+  margin: 3px 0 6px 0;
+}
+
+.bus-rail.top-bus {
+  background: rgba(239, 68, 68, 0.08);
+  border-bottom: 2px solid #ef4444;
+}
+
+.bus-rail.bottom-bus {
+  background: rgba(2, 132, 199, 0.08);
+  border-top: 2px solid #0284c7;
+  margin-top: auto;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bus-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1;
+  width: 100%;
+  position: relative;
+}
+
+.bus-line::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.top-bus .bus-line::before {
+  background: #ef4444;
+}
+
+.bottom-bus .bus-line::before {
+  background: #0284c7;
+}
+
+.bus-tag {
+  font-size: 11px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  z-index: 2;
+}
+
+.top-bus .bus-tag { color: #dc2626; }
+.bottom-bus .bus-tag { color: #0284c7; }
+
+.bus-footer-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.module-code {
+  font-size: 8px;
+  font-weight: 700;
+  color: #64748b;
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   Module 1: Relays & Timer Module
+   ========================================================================== */
+.module-relays {
+  flex: 1.25;
+}
+
+.relays-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex: 1;
+  margin-bottom: 6px;
+}
+
+.relay-unit {
+  flex: 1;
+  background: #f1f3f4;
+  border: 1px solid #b0bec5;
+  border-radius: 6px;
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.relay-window {
+  width: 52px;
+  height: 42px;
+  background: rgba(224, 242, 254, 0.6);
+  border: 2px solid #0284c7;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 6px rgba(2, 132, 199, 0.3);
+  position: relative;
+}
+
+.relay-coil-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.relay-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.relay-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #64748b;
+  box-shadow: 0 0 2px #475569;
+  transition: all 0.2s;
+}
+
+.relay-led.active {
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e, 0 0 4px #86efac;
+}
+
+/* ==========================================================================
+   Relay Unit Faceplate Graphic (100% Identical to Photo media_1792947386969_e0f60c87.png)
+   ========================================================================== */
+.relay-faceplate-graphic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: #fdfbf7;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 6px 4px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+  gap: 2px;
+}
+
+.contact-tier {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+}
+
+.pin-group-left {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  width: 32px;
+}
+
+.switch-drawing {
+  flex: 1;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.contact-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.switch-blade-arm {
+  transition: transform 0.12s ease-out;
+  transform-origin: 28px 20px;
+}
+
+.switch-blade-arm.energized {
+  transform: rotate(26deg);
+}
+
+.pin-group-right {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 32px;
+}
+
+.pin-sub {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  justify-content: flex-end;
+}
+
+.pin-num {
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--font-sans);
+  color: #0f172a;
+}
+
+.relay-rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1px 2px;
+  position: relative;
+}
+
+.rating-text {
+  font-size: 8px;
+  font-weight: 800;
+  color: #1e293b;
+  font-family: var(--font-sans);
+}
+
+.center-dashed-line {
+  position: absolute;
+  left: 54%;
+  transform: translateX(-50%);
+  width: 2.5px;
+  height: 12px;
+  border-left: 2.5px dashed #1e293b;
+}
+
+/* Coil Row at the bottom of Relay Unit */
+.relay-coil-tier {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 3px;
+  padding-top: 3px;
+  position: relative;
+}
+
+.coil-pin-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  width: 28px;
+}
+
+.polarity-tag {
+  font-size: 11px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.coil-box-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: 1;
+}
+
+.coil-lead-line {
+  width: 8px;
+  height: 2px;
+  background: #1e293b;
+}
+
+.coil-rect-box {
+  width: 48px;
+  height: 36px;
+  border: 2px solid #0f172a;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+  position: relative;
+  z-index: 2;
+}
+
+.coil-rect-box::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2.5px;
+  height: 7px;
+  border-left: 2.5px dashed #1e293b;
+}
+
+.coil-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.coil-volt {
+  font-size: 9px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* White Banana Jack (Matching Photo Pin 2 & Pin 7) */
+.jack-white {
+  background: radial-gradient(circle at 35% 35%, #ffffff, #e2e8f0);
+  border: 1px solid #94a3b8;
+}
+
+.jack-white::after {
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.8), 0 0 0 1.5px #64748b;
+}
+
+/* ==========================================================================
+   Module 2: Standard TPA Buttons Module (BUTTONS MODULE - As in Photo 3 & 4)
+   ========================================================================== */
+.module-buttons {
+  flex: 1.15;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  flex: 1;
+  margin-bottom: 6px;
+}
+
+.button-unit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #f1f3f4;
+  border: 1px solid #b0bec5;
+  border-radius: 6px;
+  padding: 6px 4px;
+}
+
+/* ==========================================================================
+   Button Unit Faceplate Graphic (100% Identical to Photo media_1792948144168_59686b0c.png)
+   ========================================================================== */
+.btn-faceplate-graphic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: #fdfbf7;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 6px 4px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+  gap: 2px;
+}
+
+.btn-symbol-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.btn-id-label {
+  font-size: 11px;
+  font-weight: 900;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  margin-bottom: 1px;
+}
+
+.btn-actuator-svg {
+  width: 44px;
+  height: 22px;
+  overflow: visible;
+}
+
+.btn-switch-scheme {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  margin-top: -2px;
+}
+
+.terminal-c-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 28px;
+}
+
+.scheme-letter {
+  font-size: 11px;
+  font-weight: 900;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  line-height: 1;
+}
+
+.switch-arm-svg-box {
+  flex: 1;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-switch-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.btn-blade-arm {
+  transition: transform 0.1s ease-out;
+  transform-origin: 16px 42px;
+}
+
+.btn-blade-arm.pressed {
+  transform: rotate(26deg);
+}
+
+.terminal-nc-no-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 28px;
+}
+
+.terminal-subgroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.btn-rating-tag {
+  font-size: 7.5px;
+  font-weight: 800;
+  color: #1e293b;
+  font-family: var(--font-sans);
+  text-align: center;
+  margin-top: 1px;
+}
+
+.push-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #9e9e9e;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4);
+  transition: all 0.1s;
+}
+
+.push-btn:active {
+  transform: translateY(2px) scale(0.96);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.btn-physical-stop {
+  background: radial-gradient(circle at 35% 35%, #ef4444, #991b1b);
+  border-color: #7f1d1d;
+}
+
+.btn-physical-yellow {
+  background: radial-gradient(circle at 35% 35%, #eab308, #854d0e);
+  border-color: #713f12;
+  color: #000;
+}
+
+.btn-physical-start {
+  background: radial-gradient(circle at 35% 35%, #22c55e, #14532d);
+  border-color: #14532d;
+}
+
+/* Built-in Indicator Lamp (Photo 4) */
+.lamp-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 3px 4px;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.lamp-symbol-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 3px;
+}
+
+.lamp-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid #334155;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.lamp-circle.active {
+  background: #fef08a;
+  border-color: #eab308;
+  color: #ca8a04;
+  box-shadow: 0 0 10px #facc15;
+}
+
+.lamp-lbl {
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   Module 3: Buzzer & Lamp Module (BUZZ LAMP MODULE - Matching Photo 2)
+   ========================================================================== */
+.module-buzz-lamp {
+  flex: 1.35;
+}
+
+.buzz-bus {
+  justify-content: space-between;
+}
+
+.buzz-bus .bus-line {
+  display: flex;
+  justify-content: space-around;
+  flex: 1;
+  padding: 0 4px;
+}
+
+.buzz-lamp-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  padding: 4px 0;
+}
+
+.buzz-lamp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px dashed rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  padding: 6px 4px;
+}
+
+.buzz-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 6px;
+}
+
+/* Schematic Units with Jacks & Lamp Cross Symbol */
+.lamp-schematic-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.schematic-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #475569;
+  padding: 0 2px;
+}
+
+.schematic-terminals {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.lamp-symbol-circle {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #334155;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.lamp-symbol-circle .cross {
+  font-size: 11px;
+  font-weight: 900;
+  color: #334155;
+  line-height: 1;
+}
+
+/* Pilot Lamp Physical Lens */
+.pilot-lamp-socket {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 2px solid #94a3b8;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.35), inset 0 1px 3px rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pilot-lamp-lens {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.15s ease-in-out;
+}
+
+.pilot-lamp-lens .lens-reflection {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 12px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  transform: rotate(-30deg);
+}
+
+/* Inactive vs Active Colors */
+.pilot-lamp-lens.lamp-red {
+  background: radial-gradient(circle at 40% 40%, #dc2626 0%, #7f1d1d 70%, #450a0a 100%);
+  opacity: 0.55;
+  border: 1px solid #7f1d1d;
+}
+
+.pilot-lamp-lens.lamp-red.active {
+  opacity: 1;
+  background: radial-gradient(circle at 40% 40%, #ffffff 0%, #fecaca 15%, #ef4444 55%, #b91c1c 100%);
+  box-shadow: 0 0 18px #ef4444, inset 0 0 6px #fff;
+  filter: drop-shadow(0 0 8px #ef4444);
+}
+
+.pilot-lamp-lens.lamp-yellow {
+  background: radial-gradient(circle at 40% 40%, #d97706 0%, #78350f 70%, #451a03 100%);
+  opacity: 0.55;
+  border: 1px solid #78350f;
+}
+
+.pilot-lamp-lens.lamp-yellow.active {
+  opacity: 1;
+  background: radial-gradient(circle at 40% 40%, #ffffff 0%, #fef08a 15%, #eab308 55%, #a16207 100%);
+  box-shadow: 0 0 18px #eab308, inset 0 0 6px #fff;
+  filter: drop-shadow(0 0 8px #eab308);
+}
+
+.pilot-lamp-lens.lamp-green {
+  background: radial-gradient(circle at 40% 40%, #059669 0%, #064e3b 70%, #022c22 100%);
+  opacity: 0.55;
+  border: 1px solid #064e3b;
+}
+
+.pilot-lamp-lens.lamp-green.active {
+  opacity: 1;
+  background: radial-gradient(circle at 40% 40%, #ffffff 0%, #a7f3d0 15%, #10b981 55%, #047857 100%);
+  box-shadow: 0 0 18px #10b981, inset 0 0 6px #fff;
+  filter: drop-shadow(0 0 8px #10b981);
+}
+
+/* Buzzer Physical Sounder Disc (Cyan/Blue Face as in Photo 2) */
+.buzzer-sounder-col {
+  padding-top: 4px;
+}
+
+.buzzer-faceplate-disc {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  border: 2px solid #0284c7;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 3px rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.1s;
+}
+
+.buzzer-faceplate-disc.active {
+  animation: buzzer-vibrate 0.12s infinite alternate;
+}
+
+@keyframes buzzer-vibrate {
+  0% { transform: scale(1); filter: drop-shadow(0 0 8px #0284c7); }
+  100% { transform: scale(1.06); filter: drop-shadow(0 0 16px #38bdf8); }
+}
+
+.buzzer-inner-rings {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ring-rib.ring-2 {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.25);
+}
+
+.ring-rib.ring-1 {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+.buzzer-sound-holes {
+  display: flex;
+  gap: 2.5px;
+  z-index: 2;
+}
+
+.buzzer-sound-holes span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #0f172a;
+}
+
+.sound-wave-ripple {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sound-wave-ripple.active {
+  animation: buzzer-ripple 0.6s infinite ease-out;
+}
+
+@keyframes buzzer-ripple {
+  0% { transform: scale(0.9); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Buzzer Schematic & Terminals */
+.buzzer-schematic-symbol {
+  width: 38px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buzzer-symbol-svg {
+  width: 36px;
+  height: 28px;
+}
+
+.buzzer-terminals-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.buzzer-terminals-row .volts {
+  font-size: 8px;
+  font-weight: 700;
+  color: #475569;
+}
+
+/* ==========================================================================
+   Module 4: 24VDC Power Supply Module (As in Photo 2)
+   ========================================================================== */
+.module-power {
+  flex: 1.05;
+}
+
+.power-body {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex: 1;
+  margin-bottom: 6px;
+}
+
+.power-left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.analog-meter {
+  width: 110px;
+  height: 54px;
+  background: #ffffff;
+  border: 2px solid #37474f;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px;
+  position: relative;
+}
+
+.meter-face {
+  width: 100%;
+  height: 34px;
+  border-bottom: 1px solid #cfd8dc;
+  position: relative;
+  overflow: hidden;
+}
+
+.meter-scale {
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #546e7a;
+  text-align: center;
+}
+
+.meter-needle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  height: 28px;
+  background: #d90429;
+  transform-origin: bottom center;
+  transform: rotate(-45deg);
+  transition: transform 0.4s cubic-bezier(0.1, 1.2, 0.3, 1);
+}
+
+.meter-needle.powered {
+  transform: rotate(20deg);
+}
+
+.meter-pivot-v {
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.meter-label {
+  font-size: 8px;
+  font-weight: 800;
+  color: #263238;
+}
+
+.power-switches-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.rocker-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rocker-switch {
+  width: 42px;
+  height: 24px;
+  background: #475569;
+  border: 2px solid #1e293b;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 900;
+  color: #fff;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  transition: all 0.2s;
+}
+
+.rocker-switch.on {
+  background: #dc2626;
+  box-shadow: 0 0 8px #ef4444, inset 0 -2px 4px rgba(0,0,0,0.4);
+}
+
+.switch-desc {
+  font-size: 8px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.ac-socket-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.socket-plug-shape {
+  width: 32px;
+  height: 18px;
+  background: #0f172a;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+}
+
+.socket-desc {
+  font-size: 6.5px;
+  font-weight: 700;
+  color: #475569;
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* UNO POWER casing (Phoenix Contact style) */
+.uno-power-block {
+  width: 110px;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.uno-header {
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 2px;
+}
+
+.uno-brand {
+  font-size: 8.5px;
+  font-weight: 900;
+  color: #0f172a;
+  display: block;
+}
+
+.uno-ord {
+  font-size: 7px;
+  color: #64748b;
+  display: block;
+}
+
+.uno-screw-terminals {
+  display: flex;
+  justify-content: space-between;
+  font-size: 6.5px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #334155;
+  background: #e2e8f0;
+  padding: 2px 3px;
+  border-radius: 2px;
+}
+
+.uno-body-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin: 3px 0;
+}
+
+.uno-output-spec {
+  font-size: 7.5px;
+  text-align: center;
+  color: #334155;
+  line-height: 1.1;
+}
+
+.uno-dc-ok {
+  font-size: 7.5px;
+  font-weight: 800;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.dc-ok-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 4px #22c55e;
+}
+
+.phoenix-logo {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   BANANA JACK TERMINALS (4mm Chấu cắm bắp chuối)
+   -------------------------------------------------------------------------- */
+.jack {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+  z-index: 60;
+  pointer-events: auto;
+}
+
+/* Brass Hole inside Jack */
+.jack::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #111;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.8), 0 0 0 1.5px #d4af37;
+}
+
+.jack:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.jack.selected-source {
+  transform: scale(1.35);
+  box-shadow: 0 0 12px #facc15, inset 0 0 4px #fff;
+  animation: jack-glow 0.8s infinite alternate;
+}
+
+.jack.guide-target {
+  box-shadow: 0 0 12px #22c55e, inset 0 0 4px #fff;
+  animation: jack-guide 0.8s infinite alternate;
+}
+
+@keyframes jack-glow {
+  from { filter: drop-shadow(0 0 2px #facc15); }
+  to { filter: drop-shadow(0 0 8px #f59e0b); }
+}
+
+@keyframes jack-guide {
+  from { filter: drop-shadow(0 0 2px #22c55e); }
+  to { filter: drop-shadow(0 0 8px #4ade80); }
+}
+
+/* Jack Color Variations */
+.jack-red { background: radial-gradient(circle at 35% 35%, #ef4444, #991b1b); }
+.jack-black { background: radial-gradient(circle at 35% 35%, #475569, #0f172a); }
+.jack-blue { background: radial-gradient(circle at 35% 35%, #0284c7, #075985); }
+.jack-yellow { background: radial-gradient(circle at 35% 35%, #eab308, #854d0e); }
+.jack-green { background: radial-gradient(circle at 35% 35%, #10b981, #065f46); }
+
+/* --------------------------------------------------------------------------
+   MIDDLE SECTION: ALUMINUM GROOVE PROFILE (Rãnh nhôm định hình)
+   -------------------------------------------------------------------------- */
+.aluminum-slotted-wall {
+  height: 135px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #cfd8dc 0px,
+    #cfd8dc 14px,
+    #78909c 15px,
+    #546e7a 17px,
+    #90a4ae 18px
+  );
+  border: 2px solid #78909c;
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 6px 20px;
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.hardware-component {
+  background: #fdfbf7;
+  border: 2px solid #607d8b;
+  border-radius: 6px;
+  padding: 6px 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.comp-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: #263238;
+  border-bottom: 1.5px solid #b0bec5;
+  padding-bottom: 4px;
+  text-align: center;
+}
+
+/* Pressure Switch Block S1 */
+.pressure-switch-unit {
+  width: 220px;
+}
+
+.pswitch-housing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pswitch-dial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #263238;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.dial-val {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.pswitch-state-led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #64748b;
+  transition: all 0.2s;
+}
+
+.pswitch-state-led.active {
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b, 0 0 4px #fbbf24;
+}
+
+.pswitch-terminals {
+  display: flex;
+  gap: 12px;
+}
+
+.term-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Proximity Sensor Unit B1 (Matching Photo 1) */
+.proximity-sensor-unit {
+  width: 260px;
+}
+
+.prox-mounting-bracket {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.prox-top-assembly {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%);
+  border: 1.5px solid #64748b;
+  border-radius: 4px;
+  padding: 6px 8px;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(255,255,255,0.7), 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.prox-sensor-barrel {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.prox-sensing-tip {
+  width: 10px;
+  height: 18px;
+  background: #1e293b;
+  border-radius: 3px 0 0 3px;
+  border-right: 2px solid #f59e0b;
+}
+
+.prox-barrel-housing {
+  background: repeating-linear-gradient(
+    90deg,
+    #475569 0px,
+    #475569 3px,
+    #334155 3px,
+    #334155 5px
+  );
+  padding: 3px 6px;
+  border-radius: 0 3px 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #1e293b;
+}
+
+.prox-model-tag {
+  font-size: 7.5px;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 0.5px;
+}
+
+.prox-state-led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #78350f;
+  border: 1px solid #451a03;
+  transition: all 0.15s ease;
+}
+
+.prox-state-led.active {
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b, 0 0 4px #fff;
+  border-color: #fbbf24;
+}
+
+.prox-cable-loop {
+  width: 44px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cable-loop-svg {
+  width: 40px;
+  height: 30px;
+}
+
+.prox-hex-screws {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hex-screw {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #64748b;
+  border: 1px solid #334155;
+  box-shadow: inset 0 1px 3px #000;
+  position: relative;
+}
+
+.hex-screw::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 3px;
+  height: 3px;
+  background: #0f172a;
+  border-radius: 1px;
+}
+
+.prox-terminals-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #eceff1;
+  border: 1px solid #b0bec5;
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+
+.prox-terminals-row .term-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.prox-terminals-row .jack-code {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #37474f;
+}
+
+.prox-badge {
+  text-align: center;
+  font-size: 8.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: #e2e8f0;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.prox-badge.active {
+  background: #fef08a;
+  color: #854d0e;
+  border: 1px solid #eab308;
+}
+
+/* Solenoid Valve 4/2 Block Y */
+.solenoid-valve-unit {
+  width: 250px;
+}
+
+.valve-housing {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.solenoid-coil-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #37474f;
+  padding: 6px 10px;
+  border-radius: 4px;
+  color: #eceff1;
+}
+
+.coil-tag {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.solenoid-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #90a4ae;
+}
+
+.solenoid-led.active {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+}
+
+.coil-terminals {
+  display: flex;
+  gap: 8px;
+}
+
+.valve-hydraulic-spool {
+  background: #cfd8dc;
+  border: 1px solid #78909c;
+  padding: 4px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.valve-state-badge {
+  font-size: 9px;
+  font-weight: 800;
+  color: #37474f;
+}
+
+.valve-state-badge.active {
+  color: #0284c7;
+}
+
+/* --------------------------------------------------------------------------
+   LOWER SECTION: HYDRAULIC BENCH
+   -------------------------------------------------------------------------- */
+.hydraulic-bench-bottom {
+  display: flex;
+  gap: 8px;
+  min-height: 180px;
+  background: #b0bec5;
+  border-radius: 8px;
+  padding: 8px;
+  border: 2px solid #78909c;
+}
+
+.hydraulic-component {
+  background: #f8fafc;
+  border: 2px solid #64748b;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.comp-label {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+/* Pressure Gauge */
+.pressure-gauge-unit {
+  width: 150px;
+}
+
+.gauge-dial-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.gauge-svg {
+  width: 82px;
+  height: 82px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+}
+
+#gauge-needle-group {
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.gauge-digital-readout {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+  background: #e2e8f0;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #94a3b8;
+}
+
+/* Throttle Valve */
+.throttle-valve-unit {
+  width: 140px;
+}
+
+.throttle-knob-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.knob-dial {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #475569, #0f172a);
+  border: 2px solid #1e293b;
+  cursor: grab;
+  position: relative;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  transform: rotate(0deg);
+  transition: transform 0.1s;
+}
+
+.knob-pointer {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2.5px;
+  height: 12px;
+  background: #facc15;
+  border-radius: 2px;
+}
+
+.knob-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #334155;
+  gap: 1px;
+}
+
+/* Cylinder Rig Stage */
+.cylinder-assembly-unit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cylinder-stage {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 105px;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.cylinder-rig {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Cylinder Barrel */
+.cylinder-barrel {
+  width: 250px;
+  height: 54px;
+  background: linear-gradient(to bottom, #94a3b8 0%, #cbd5e1 50%, #64748b 100%);
+  border: 3px solid #334155;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.piston-puck {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: #1e293b;
+  left: 0;
+  z-index: 5;
+  transition: left 0.1s linear;
+}
+
+.chamber-oil {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  opacity: 0.45;
+  transition: width 0.1s linear;
+}
+
+.chamber-left {
+  left: 0;
+  background: #0284c7;
+  width: 0px;
+}
+
+.chamber-right {
+  right: 0;
+  background: #f59e0b;
+  width: 100%;
+}
+
+/* Piston Rod */
+.piston-rod {
+  position: relative;
+  height: 18px;
+  width: 20px; /* extends dynamically via JS up to 180px */
+  background: linear-gradient(to bottom, #e2e8f0 0%, #94a3b8 50%, #ffffff 100%);
+  border: 2px solid #475569;
+  border-left: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  transition: width 0.1s linear;
+}
+
+.press-die-tool {
+  position: absolute;
+  right: -24px;
+  width: 24px;
+  height: 60px;
+  background: #334155;
+  border: 2px solid #0f172a;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  font-size: 8px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.4);
+}
+
+/* Workpiece Fixture */
+.workpiece-fixture {
+  margin-left: 170px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.workpiece-block {
+  width: 50px;
+  height: 80px;
+  background: linear-gradient(135deg, #a1a1aa, #71717a);
+  border: 3px solid #3f3f46;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  font-size: 9px;
+  font-weight: 800;
+  color: #f4f4f5;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: all 0.2s;
+}
+
+.workpiece-block.pressed {
+  background: linear-gradient(135deg, #e76f51, #f4a261);
+  box-shadow: 0 0 12px #f4a261;
+}
+
+.fixture-base {
+  background: #27272a;
+  color: #a1a1aa;
+  font-size: 8px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+.cylinder-status-row {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  background: #e2e8f0;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   Modals & Popups
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.2s ease;
+}
+
+.modal-backdrop.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.modal-dialog {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  width: 600px;
+  max-width: 90vw;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: #0f172a;
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #334155;
+}
+
+.modal-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 18px;
+  max-height: 450px;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.step-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.step-table th, .step-table td {
+  padding: 8px 10px;
+  border: 1px solid #334155;
+  text-align: left;
+}
+
+.step-table th {
+  background: #0f172a;
+  color: #38bdf8;
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   Mobile Landscape Warning & Responsive Optimizations
+   ========================================================================== */
+
+/* Orientation Overlay for Phones in Portrait Mode */
+.landscape-prompt-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+
+@media screen and (orientation: portrait) and (max-width: 900px) {
+  .landscape-prompt-overlay:not(.dismissed) {
+    display: flex !important;
+  }
+}
+
+@media screen and (orientation: landscape), (min-width: 901px) {
+  .landscape-prompt-overlay {
+    display: none !important;
+  }
+}
+
+.landscape-prompt-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 28px 24px;
+  max-width: 360px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.phone-rotate-anim {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.phone-graphic {
+  width: 34px;
+  height: 58px;
+  border: 3px solid #38bdf8;
+  border-radius: 8px;
+  background: #0f172a;
+  position: relative;
+  animation: rotate-phone 2.4s infinite ease-in-out;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+.phone-screen-inner {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  right: 3px;
+  bottom: 4px;
+  background: rgba(56, 189, 248, 0.25);
+  border-radius: 3px;
+}
+
+@keyframes rotate-phone {
+  0%, 25% { transform: rotate(0deg); }
+  50%, 75% { transform: rotate(90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.rotate-curved-arrow {
+  position: absolute;
+  font-size: 26px;
+  color: #facc15;
+  animation: spin-pulse 2.4s infinite ease-in-out;
+}
+
+@keyframes spin-pulse {
+  0%, 25% { opacity: 0.3; transform: scale(0.9); }
+  50%, 75% { opacity: 1; transform: scale(1.2) rotate(90deg); }
+  100% { opacity: 0.3; transform: scale(0.9); }
+}
+
+.landscape-prompt-card h3 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.landscape-prompt-card p {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.btn-dismiss-prompt {
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #334155;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.2s;
+}
+
+.btn-dismiss-prompt:hover {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+/* Mobile & Touchscreen Ergonomics */
+@media screen and (max-height: 520px), screen and (max-width: 900px) {
+  .main-header {
+    height: 38px !important;
+    padding: 0 10px !important;
+  }
+
+  .logo-badge {
+    padding: 2px 6px !important;
+    font-size: 11px !important;
+  }
+
+  .logo-text h1 {
+    font-size: 12px !important;
+  }
+
+  .logo-text p {
+    display: none !important;
+  }
+
+  .lab-selector-wrapper {
+    padding: 2px 8px !important;
+  }
+
+  .lab-selector-wrapper label {
+    display: none !important;
+  }
+
+  .lab-selector-wrapper select {
+    font-size: 11px !important;
+    padding: 2px 6px !important;
+    max-width: 180px !important;
+  }
+
+  .system-status-indicator {
+    padding: 3px 8px !important;
+    font-size: 9.5px !important;
+  }
+
+  .workspace {
+    height: calc(100vh - 38px) !important;
+  }
+
+  .workbench-top-bar {
+    min-height: 36px !important;
+    padding: 3px 8px !important;
+  }
+
+  .badge-lab {
+    display: none !important;
+  }
+
+  .palette-lbl {
+    display: none !important;
+  }
+
+  .topbar-wire-palette {
+    padding: 2px 4px !important;
+    gap: 3px !important;
+  }
+
+  .topbar-color-btn {
+    padding: 2px 5px !important;
+    font-size: 10px !important;
+  }
+
+  .topbar-color-btn .kbd-hint {
+    display: none !important;
+  }
+
+  /* Easy finger tap for 4mm banana jacks on touchscreens */
+  .jack::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    z-index: 10;
+  }
+}

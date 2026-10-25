@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Mô Phỏng Thủy Lực Khí Nén</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header Bar -->
+    <header class="main-header">
+      <div class="header-left">
+        <div class="logo-box">
+          <span class="logo-badge">CTUT</span>
+          <div class="logo-text">
+            <h1>MÔ PHỎNG THỦY LỰC KHÍ NÉN</h1>
+            <p>Khoa Kỹ thuật Cơ khí - Đại học Kỹ thuật Công nghệ Cần Thơ</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Select Lab Lesson -->
+      <div class="header-center">
+        <div class="lab-selector-wrapper">
+          <label for="lab-select">Bài thực hành:</label>
+          <select id="lab-select">
+            <option value="4" selected>Bài 4: Thiết bị ép lắp chi tiết (Công tắc áp suất 30 bar)</option>
+            <option value="1">Bài 1: Thiết bị phân loại (Van 4/2, điều khiển trực tiếp)</option>
+            <option value="2">Bài 2: Lựa chọn phần tử băng tải (Tiết lưu + Giảm áp)</option>
+            <option value="3">Bài 3: Thiết bị uốn tôn (Mạch điện tự duy trì K1)</option>
+            <option value="5">Bài 5: Máy dập ép (Mạch vi phân)</option>
+            <option value="6">Bài 6: Thiết bị dẫn tiến máy khoan (Di chuyển nhanh/chậm)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="mode-toggles">
+          <button id="btn-mode-practice" class="mode-btn active" title="Chế độ Luyện tập có gợi ý và sơ đồ hỗ trợ">
+            <span class="icon">📖</span> Luyện tập
+          </button>
+          <button id="btn-mode-exam" class="mode-btn" title="Chế độ Tự do / Kiểm tra không có gợi ý">
+            <span class="icon">🎯</span> Kiểm tra
+          </button>
+        </div>
+        <div class="system-status-indicator">
+          <span class="status-dot" id="system-status-dot"></span>
+          <span id="system-status-text">SẴN SÀNG</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <div class="workspace">
+      <!-- Left Panel: Wiring Tool, Status, Schematics & Control -->
+      <aside class="sidebar-panel" id="sidebar-panel">
+        <!-- Sidebar Collapse / Title Header -->
+        <div class="sidebar-header-bar">
+          <span class="sidebar-title">BẢNG ĐIỀU KHIỂN & BÀI HỌC</span>
+          <button id="btn-close-sidebar" class="sidebar-close-btn" title="Thu gọn bảng điều khiển (Phím B)">◀ Thu gọn</button>
+        </div>
+
+        <!-- Control actions -->
+        <div class="panel-section control-actions-card">
+          <h2 class="section-title">Thao tác & Vận hành</h2>
+          <div class="action-buttons-grid">
+            <button id="btn-check-wiring" class="btn btn-primary">
+              <span class="btn-icon">⚡</span> Kiểm tra đấu dây
+            </button>
+            <button id="btn-auto-wire" class="btn btn-secondary" title="Xem mạch đấu chuẩn để học tập">
+              <span class="btn-icon">🪄</span> Đấu dây mẫu
+            </button>
+            <button id="btn-clear-wires" class="btn btn-outline-danger" title="Xóa toàn bộ dây điện đã cắm">
+              <span class="btn-icon">🗑️</span> Rút hết dây
+            </button>
+            <button id="btn-toggle-sound" class="btn btn-ghost" title="Bật/Tắt âm thanh rơ le & van">
+              <span class="btn-icon" id="sound-icon">🔊</span> Âm thanh
+            </button>
+          </div>
+        </div>
+
+        <!-- Wire Color Selection & Cable Count -->
+        <div class="panel-section wire-palette-card">
+          <h2 class="section-title">Hộp dây cắm thực hành (4mm)</h2>
+          <p class="section-desc">Chọn màu dây trước khi cắm từ cọc này sang cọc khác:</p>
+          <div class="wire-colors-picker">
+            <button class="color-btn active" data-color="#e63946" style="--c: #e63946;" title="Dây Đỏ: Nguồn +24V">
+              <span class="dot"></span> Dây Đỏ (+24V)
+            </button>
+            <button class="color-btn" data-color="#1d3557" style="--c: #1d3557;" title="Dây Xanh đậm / Đen: Nguồn 0V">
+              <span class="dot"></span> Dây 0V (GND)
+            </button>
+            <button class="color-btn" data-color="#f4a261" style="--c: #f4a261;" title="Dây Vàng: Tín hiệu nút nhấn / công tắc">
+              <span class="dot"></span> Dây Vàng (Signal)
+            </button>
+            <button class="color-btn" data-color="#2a9d8f" style="--c: #2a9d8f;" title="Dây Xanh lục: Điều khiển Relay / Solenoid">
+              <span class="dot"></span> Dây Xanh lá (Control)
+            </button>
+          </div>
+          <div class="wire-stats">
+            <span>Số dây đã cắm: <strong id="wire-count">0</strong></span>
+            <span class="wire-help-hint">💡 Mẹo: Nhấp vào dây trên bảng để tháo dây đó</span>
+          </div>
+        </div>
+
+        <!-- Lab Overview & Real-time Live Log -->
+        <div class="panel-section info-card">
+          <h2 class="section-title" id="lab-title-text">Bài 4: Thiết bị ép lắp chi tiết</h2>
+          <div class="lab-description" id="lab-desc-content">
+            <p><strong>Yêu cầu công nghệ:</strong></p>
+            <ul>
+              <li>Nhấn <code>START</code>: Xi lanh tiến ra ép chi tiết với tốc độ hiệu chỉnh bằng van tiết lưu một chiều.</li>
+              <li>Hành trình co về tự động khi công tắc áp suất <code>S1</code> kích hoạt tại <strong>30 bar (3 MPa)</strong>.</li>
+              <li>Nhấn <code>STOP</code>: Dừng khẩn cấp và đưa xi lanh về vị trí ban đầu.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Electrical & Hydraulic Schematics View -->
+        <div class="panel-section schematic-card">
+          <div class="schematic-header">
+            <h2 class="section-title">Sơ đồ mạch nguyên lý (Bài 4)</h2>
+            <div class="schematic-tab-btns">
+              <button id="tab-elec-btn" class="sub-tab-btn active">Điện</button>
+              <button id="tab-hyd-btn" class="sub-tab-btn">Thủy lực</button>
+            </div>
+          </div>
+          
+          <div class="schematic-container">
+            <!-- Electrical schematic SVG -->
+            <div id="elec-schematic-view" class="schematic-view active">
+              <svg viewBox="0 0 380 430" class="schematic-svg" id="svg-elec-schematic">
+                <!-- Power rails -->
+                <line x1="30" y1="30" x2="350" y2="30" stroke="#e63946" stroke-width="2.5" />
+                <text x="35" y="24" fill="#e63946" font-size="12" font-weight="bold">+24V</text>
+                
+                <line x1="30" y1="390" x2="350" y2="390" stroke="#1d3557" stroke-width="2.5" />
+                <text x="35" y="408" fill="#1d3557" font-size="12" font-weight="bold">0V</text>
+
+                <!-- Branch 1: START, STOP, K2 NC, K1 Coil -->
+                <!-- START button (PB3: C - NO) -->
+                <line x1="90" y1="30" x2="90" y2="60" stroke="#666" stroke-width="1.8"/>
+                <g id="sch-start" class="sch-comp">
+                  <circle cx="85" cy="70" r="3" fill="#333"/>
+                  <circle cx="85" cy="95" r="3" fill="#333"/>
+                  <line x1="77" y1="70" x2="77" y2="95" stroke="#2a9d8f" stroke-width="2.2"/>
+                  <line x1="68" y1="82" x2="77" y2="82" stroke="#2a9d8f" stroke-width="2"/>
+                  <text x="35" y="65" font-size="11" font-weight="bold" fill="#2a9d8f">START (PB3)</text>
+                  <text x="92" y="73" font-size="8.5" font-weight="bold" fill="#1e293b">C (3)</text>
+                  <text x="92" y="98" font-size="8.5" font-weight="bold" fill="#1e293b">NO (4)</text>
+                </g>
+
+                <!-- Parallel RL1 NO (3 - 4) contact -->
+                <line x1="90" y1="60" x2="170" y2="60" stroke="#666" stroke-width="1.8"/>
+                <line x1="170" y1="60" x2="170" y2="70" stroke="#666" stroke-width="1.8"/>
+                <g id="sch-k1-contact" class="sch-comp">
+                  <line x1="170" y1="70" x2="170" y2="75" stroke="#666" stroke-width="1.8"/>
+                  <circle cx="170" cy="75" r="3" fill="#333"/>
+                  <circle cx="170" cy="95" r="3" fill="#333"/>
+                  <line x1="163" y1="74" x2="167" y2="92" stroke="#e63946" stroke-width="2"/>
+                  <line x1="170" y1="95" x2="170" y2="105" stroke="#666" stroke-width="1.8"/>
+                  <text x="175" y="86" font-size="11" font-weight="bold" fill="#333">RL1</text>
+                  <text x="175" y="73" font-size="8.5" font-weight="bold" fill="#1e293b">3</text>
+                  <text x="175" y="100" font-size="8.5" font-weight="bold" fill="#1e293b">4</text>
+                </g>
+                <line x1="90" y1="105" x2="170" y2="105" stroke="#666" stroke-width="1.8"/>
+                <circle cx="90" cy="105" r="3.5" fill="#333"/>
+                <circle cx="170" cy="105" r="3.5" fill="#333"/>
+
+                <!-- Line from STOP button (PB1: C - NC) -->
+                <line x1="90" y1="95" x2="90" y2="135" stroke="#666" stroke-width="1.8"/>
+                <g id="sch-stop" class="sch-comp">
+                  <circle cx="85" cy="145" r="3" fill="#333"/>
+                  <circle cx="85" cy="170" r="3" fill="#333"/>
+                  <line x1="77" y1="142" x2="85" y2="142" stroke="#e63946" stroke-width="2.2"/>
+                  <line x1="77" y1="142" x2="77" y2="173" stroke="#e63946" stroke-width="2.2"/>
+                  <line x1="77" y1="173" x2="85" y2="173" stroke="#e63946" stroke-width="2.2"/>
+                  <line x1="68" y1="157" x2="77" y2="157" stroke="#e63946" stroke-width="2"/>
+                  <text x="35" y="155" font-size="11" font-weight="bold" fill="#e63946">STOP (PB1)</text>
+                  <text x="92" y="147" font-size="8.5" font-weight="bold" fill="#1e293b">C (1)</text>
+                  <text x="92" y="173" font-size="8.5" font-weight="bold" fill="#1e293b">NC (2)</text>
+                </g>
+
+                <!-- RL2 NC (3 - 2) contact -->
+                <line x1="90" y1="170" x2="90" y2="200" stroke="#666" stroke-width="1.8"/>
+                <g id="sch-k2-nc" class="sch-comp">
+                  <circle cx="90" cy="205" r="3" fill="#333"/>
+                  <circle cx="90" cy="225" r="3" fill="#333"/>
+                  <line x1="83" y1="202" x2="90" y2="225" stroke="#333" stroke-width="2"/>
+                  <text x="100" y="215" font-size="11" font-weight="bold" fill="#333">RL2 (NC)</text>
+                  <text x="60" y="208" font-size="8.5" font-weight="bold" fill="#1e293b">3</text>
+                  <text x="60" y="228" font-size="8.5" font-weight="bold" fill="#1e293b">2</text>
+                </g>
+
+                <!-- RL1 Relay Coil (8 - 1) -->
+                <line x1="90" y1="225" x2="90" y2="275" stroke="#666" stroke-width="1.8"/>
+                <g id="sch-k1-coil" class="sch-comp">
+                  <rect x="70" y="275" width="40" height="26" fill="#fff" stroke="#333" stroke-width="2"/>
+                  <text x="78" y="293" font-size="12" font-weight="bold" fill="#333">RL1</text>
+                  <text x="56" y="278" font-size="8.5" font-weight="bold" fill="#888">8 (+)</text>
+                  <text x="56" y="303" font-size="8.5" font-weight="bold" fill="#888">1 (-)</text>
+                </g>
+                <line x1="90" y1="301" x2="90" y2="390" stroke="#666" stroke-width="1.8"/>
+
+                <!-- Branch 2: Solenoid Valve Y -->
+                <line x1="170" y1="105" x2="170" y2="275" stroke="#666" stroke-width="1.8"/>
+                <g id="sch-y-solenoid" class="sch-comp">
+                  <rect x="150" y="275" width="40" height="26" fill="#fff" stroke="#333" stroke-width="2"/>
+                  <line x1="150" y1="275" x2="190" y2="301" stroke="#333" stroke-width="1.5"/>
+                  <text x="163" y="292" font-size="12" font-weight="bold" fill="#333">Y</text>
+                  <text x="135" y="280" font-size="9" fill="#888">1</text>
+                  <text x="135" y="300" font-size="9" fill="#888">2</text>
+                </g>
+                <line x1="170" y1="301" x2="170" y2="390" stroke="#666" stroke-width="1.8"/>
+                <circle cx="170" cy="390" r="3.5" fill="#333"/>
+                <circle cx="90" cy="390" r="3.5" fill="#333"/>
+
+                <!-- Branch 3: Pressure Switch S1 -> RL2 Relay Coil -->
+                <line x1="280" y1="30" x2="280" y2="170" stroke="#666" stroke-width="1.8"/>
+                <circle cx="280" cy="30" r="3.5" fill="#333"/>
+                <g id="sch-s1-switch" class="sch-comp">
+                  <circle cx="280" cy="175" r="3" fill="#333"/>
+                  <circle cx="280" cy="205" r="3" fill="#333"/>
+                  <line x1="272" y1="174" x2="278" y2="202" stroke="#e76f51" stroke-width="2"/>
+                  <!-- Pressure symbol -->
+                  <rect x="250" y="180" width="16" height="16" fill="none" stroke="#e76f51" stroke-width="1.5"/>
+                  <text x="254" y="193" font-size="10" font-weight="bold" fill="#e76f51">P</text>
+                  <text x="295" y="188" font-size="11" font-weight="bold" fill="#e76f51">S1 (3MPa)</text>
+                </g>
+                <line x1="280" y1="205" x2="280" y2="275" stroke="#666" stroke-width="1.8"/>
+                <!-- RL2 Coil -->
+                <g id="sch-k2-coil" class="sch-comp">
+                  <rect x="260" y="275" width="40" height="26" fill="#fff" stroke="#333" stroke-width="2"/>
+                  <text x="268" y="293" font-size="12" font-weight="bold" fill="#333">RL2</text>
+                  <text x="246" y="278" font-size="8.5" font-weight="bold" fill="#888">8 (+)</text>
+                  <text x="246" y="303" font-size="8.5" font-weight="bold" fill="#888">1 (-)</text>
+                </g>
+                <line x1="280" y1="301" x2="280" y2="390" stroke="#666" stroke-width="1.8"/>
+                <circle cx="280" cy="390" r="3.5" fill="#333"/>
+              </svg>
+            </div>
+
+            <!-- Hydraulic schematic SVG -->
+            <div id="hyd-schematic-view" class="schematic-view">
+              <svg viewBox="0 0 380 430" class="schematic-svg" id="svg-hyd-schematic">
+                <!-- Cylinder -->
+                <rect x="110" y="50" width="160" height="40" rx="3" fill="#f8f9fa" stroke="#333" stroke-width="2"/>
+                <line x1="160" y1="50" x2="160" y2="90" stroke="#333" stroke-width="5"/>
+                <line x1="160" y1="70" x2="290" y2="70" stroke="#444" stroke-width="8"/>
+                <!-- Ports on cylinder -->
+                <circle cx="130" cy="90" r="3" fill="#0077b6"/>
+                <text x="125" y="105" font-size="10" font-weight="bold">A</text>
+                <circle cx="250" cy="90" r="3" fill="#0077b6"/>
+                <text x="245" y="105" font-size="10" font-weight="bold">B</text>
+
+                <!-- Pressure sensor tap S1 -->
+                <line x1="130" y1="90" x2="130" y2="130" stroke="#0077b6" stroke-width="2"/>
+                <circle cx="70" cy="130" r="14" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                <text x="64" y="134" font-size="10" font-weight="bold">P</text>
+                <line x1="70" y1="130" x2="130" y2="130" stroke="#0077b6" stroke-width="2"/>
+                <text x="45" y="158" font-size="10" fill="#e76f51" font-weight="bold">S1 (3 MPa)</text>
+
+                <!-- 4/2 Directional Valve -->
+                <g transform="translate(130, 200)">
+                  <rect x="0" y="0" width="100" height="50" fill="#fff" stroke="#333" stroke-width="2"/>
+                  <line x1="50" y1="0" x2="50" y2="50" stroke="#333" stroke-width="1.5"/>
+                  <!-- Position 1 (Left: P->A, B->T) -->
+                  <line x1="15" y1="50" x2="15" y2="0" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+                  <line x1="35" y1="0" x2="35" y2="50" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+                  <!-- Position 2 (Right: P->B, A->T) -->
+                  <line x1="65" y1="50" x2="85" y2="0" stroke="#333" stroke-width="1.5"/>
+                  <line x1="85" y1="50" x2="65" y2="0" stroke="#333" stroke-width="1.5"/>
+                  <!-- Solenoid Y box on left -->
+                  <rect x="-25" y="10" width="25" height="30" fill="#e9ecef" stroke="#333" stroke-width="1.5"/>
+                  <line x1="-25" y1="10" x2="0" y2="40" stroke="#333" stroke-width="1"/>
+                  <text x="-18" y="28" font-size="11" font-weight="bold">Y</text>
+                  <!-- Spring return on right -->
+                  <path d="M 100,18 L 105,25 L 110,18 L 115,25 L 120,20" fill="none" stroke="#333" stroke-width="1.5"/>
+                </g>
+
+                <!-- Lines to Valve -->
+                <line x1="130" y1="130" x2="130" y2="180" stroke="#0077b6" stroke-width="2"/>
+                <line x1="130" y1="180" x2="145" y2="200" stroke="#0077b6" stroke-width="2"/>
+                <line x1="250" y1="90" x2="250" y2="180" stroke="#0077b6" stroke-width="2"/>
+                <line x1="250" y1="180" x2="215" y2="200" stroke="#0077b6" stroke-width="2"/>
+
+                <!-- One way Flow Control Valve on P line -->
+                <g transform="translate(145, 270)">
+                  <rect x="-15" y="0" width="30" height="40" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                  <path d="M -10,10 Q 0,20 -10,30" fill="none" stroke="#333" stroke-width="1.5"/>
+                  <path d="M 10,10 Q 0,20 10,30" fill="none" stroke="#333" stroke-width="1.5"/>
+                  <line x1="-12" y1="35" x2="12" y2="5" stroke="#333" stroke-width="1.5"/>
+                  <!-- Check valve in parallel -->
+                </g>
+                <line x1="145" y1="250" x2="145" y2="270" stroke="#0077b6" stroke-width="2"/>
+                <line x1="145" y1="310" x2="145" y2="350" stroke="#0077b6" stroke-width="2"/>
+                <!-- Pump triangle -->
+                <polygon points="145,350 135,365 155,365" fill="#0077b6" stroke="#0077b6"/>
+                <text x="140" y="380" font-size="11" font-weight="bold">P</text>
+
+                <!-- Tank T -->
+                <line x1="215" y1="250" x2="215" y2="350" stroke="#0077b6" stroke-width="2"/>
+                <line x1="205" y1="350" x2="225" y2="350" stroke="#333" stroke-width="2"/>
+                <line x1="208" y1="355" x2="222" y2="355" stroke="#333" stroke-width="2"/>
+                <text x="210" y="375" font-size="11" font-weight="bold">T</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification / Diagnostic Results Log -->
+        <div class="panel-section result-log-card">
+          <h2 class="section-title">Trạng thái mạch & Chẩn đoán</h2>
+          <div id="diagnostic-log" class="diagnostic-box">
+            <div class="log-item info">✨ Chào mừng bạn! Hãy chọn màu dây và nhấp vào 2 cọc cắm để nối dây điện theo sơ đồ.</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center & Right: Interactive Virtual Laboratory Workbench -->
+      <main class="workbench-main">
+        <!-- Workbench Toolbar (Sleek Ergonomic Toolbar) -->
+        <div class="workbench-top-bar">
+          <div class="topbar-left">
+            <button id="btn-toggle-sidebar" class="ctrl-btn btn-toggle-panel" title="Thu gọn / Mở rộng bảng điều khiển (Phím B)">
+              <span class="icon" id="sidebar-toggle-icon">◀</span>
+              <span id="sidebar-toggle-text">Bảng điều khiển</span>
+            </button>
+            <div class="bench-title">
+              <span class="badge-lab">BÀN THỰC HÀNH TPC</span>
+            </div>
+          </div>
+
+          <!-- Quick Wire Color Picker with Hotkeys 1, 2, 3, 4 -->
+          <div class="topbar-wire-palette" title="Chọn màu dây (hoặc nhấn phím 1, 2, 3, 4 trên bàn phím)">
+            <span class="palette-lbl">Dây:</span>
+            <button class="topbar-color-btn color-btn active" data-color="#e63946" data-key="1" style="--c:#e63946;" title="Phím 1: Dây Đỏ (+24V)">
+              <span class="dot"></span> <span class="kbd-hint">1</span> Đỏ
+            </button>
+            <button class="topbar-color-btn color-btn" data-color="#1d3557" data-key="2" style="--c:#1d3557;" title="Phím 2: Dây Đen / 0V (GND)">
+              <span class="dot"></span> <span class="kbd-hint">2</span> 0V
+            </button>
+            <button class="topbar-color-btn color-btn" data-color="#f4a261" data-key="3" style="--c:#f4a261;" title="Phím 3: Dây Vàng (Tín hiệu)">
+              <span class="dot"></span> <span class="kbd-hint">3</span> Vàng
+            </button>
+            <button class="topbar-color-btn color-btn" data-color="#2a9d8f" data-key="4" style="--c:#2a9d8f;" title="Phím 4: Dây Xanh lá (Điều khiển)">
+              <span class="dot"></span> <span class="kbd-hint">4</span> Xanh
+            </button>
+          </div>
+
+          <!-- Zoom & Display Controls -->
+          <div class="topbar-right">
+            <div class="zoom-controls-group">
+              <button id="btn-zoom-out" class="ctrl-btn icon-btn" title="Thu nhỏ (Ctrl -)">➖</button>
+              <span id="zoom-percent-badge" class="zoom-badge">100%</span>
+              <button id="btn-zoom-in" class="ctrl-btn icon-btn" title="Phóng to (Ctrl +)">➕</button>
+              <button id="btn-fit-screen" class="ctrl-btn active-fit" title="Tự động vừa khít màn hình (Phím F)">⛶ Vừa màn hình</button>
+              <button id="btn-toggle-fullscreen" class="ctrl-btn icon-btn" title="Bật/Tắt Toàn màn hình">🔲</button>
+            </div>
+            <div class="topbar-actions-group">
+              <button id="btn-quick-auto-wire" class="ctrl-btn btn-action-accent" title="Đấu dây mẫu chuẩn">🪄 Mẫu</button>
+              <button id="btn-quick-check" class="ctrl-btn btn-action-primary" title="Kiểm tra mạch">⚡ Đo</button>
+              <button id="btn-toggle-guide-lines" class="ctrl-btn" title="Xem danh sách bước cắm dây">💡 Gợi ý</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Workbench Area with SVG Cables Layer -->
+        <div class="bench-viewport" id="bench-viewport">
+          <div class="bench-zoom-wrapper" id="bench-zoom-wrapper">
+            <div class="bench-hardware-layout" id="bench-hardware">
+            <!-- Canvas / SVG Overlay for Patch Cord Cables inside the hardware panel -->
+            <svg class="cables-svg-layer" id="cables-svg"></svg>
+            
+            <!-- UPPER SECTION: DIN RACK WITH 3 STANDARDIZED TPA MODULES (Matching Real Lab Photos) -->
+            <div class="rack-row electrical-rack">
+              <div class="rack-frame-bar top-rail"></div>
+
+              <!-- Module 1: 24VDC Relay & Timer Module (Module Rơ le 3 khối TPA) -->
+              <div class="hardware-module module-relays" id="mod-relays">
+                <div class="module-header">
+                  <div class="brand">TPA</div>
+                  <div class="title">24VDC RELAY MODULE</div>
+                </div>
+
+                <!-- Top VCC (+V) Bus Rail -->
+                <div class="bus-rail top-bus">
+                  <span class="bus-tag">+V</span>
+                  <div class="bus-line">
+                    <div class="jack jack-red" data-id="RLY_VCC_1" data-label="Relay (+V 1)"></div>
+                    <div class="jack jack-red" data-id="RLY_VCC_2" data-label="Relay (+V 2)"></div>
+                    <div class="jack jack-red" data-id="RLY_VCC_3" data-label="Relay (+V 3)"></div>
+                    <div class="jack jack-red" data-id="RLY_VCC_4" data-label="Relay (+V 4)"></div>
+                    <div class="jack jack-red" data-id="RLY_VCC_5" data-label="Relay (+V 5)"></div>
+                  </div>
+                </div>
+
+                <div class="relays-container">
+                  <!-- Relay RL1 (K1) - 100% Identical to Photo Pinout -->
+                  <div class="relay-unit" id="unit-k1">
+                    <div class="relay-window">
+                      <div class="relay-coil-body">
+                        <span class="relay-name">RL1</span>
+                        <span class="relay-led" id="led-k1"></span>
+                      </div>
+                    </div>
+                    
+                    <div class="relay-faceplate-graphic">
+                      <!-- Contact Set 1 (Pins 3, 2, 4) -->
+                      <div class="contact-tier tier-top">
+                        <div class="pin-group-left">
+                          <div class="jack jack-red" data-id="RL1_3" data-label="RL1 (3 - COM1)"></div>
+                          <span class="pin-num">3</span>
+                        </div>
+                        <div class="switch-drawing">
+                          <svg viewBox="0 0 54 38" class="contact-svg">
+                            <line x1="0" y1="20" x2="28" y2="20" stroke="#1e293b" stroke-width="2.2"/>
+                            <!-- Moving armature blade -->
+                            <line x1="28" y1="20" x2="48" y2="6" stroke="#1e293b" stroke-width="2.5" id="arm-rl1-1" class="switch-blade-arm"/>
+                            <!-- NC contact 2 terminal -->
+                            <line x1="48" y1="6" x2="48" y2="10" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="48" y1="6" x2="54" y2="6" stroke="#1e293b" stroke-width="2.2"/>
+                            <!-- NO contact 4 open terminal -->
+                            <line x1="32" y1="28" x2="54" y2="28" stroke="#1e293b" stroke-width="2.2"/>
+                            <!-- Central vertical dashed mechanical link line -->
+                            <line x1="36" y1="0" x2="36" y2="38" stroke="#1e293b" stroke-width="2.5" stroke-dasharray="6, 5"/>
+                          </svg>
+                        </div>
+                        <div class="pin-group-right">
+                          <div class="pin-sub">
+                            <span class="pin-num">2</span>
+                            <div class="jack jack-white" data-id="RL1_2" data-label="RL1 (2 - NC1)"></div>
+                          </div>
+                          <div class="pin-sub">
+                            <span class="pin-num">4</span>
+                            <div class="jack jack-yellow" data-id="RL1_4" data-label="RL1 (4 - NO1)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Rating & Central Dashed Line -->
+                      <div class="relay-rating-row">
+                        <span class="rating-text">5A/250VAC</span>
+                        <div class="center-dashed-line"></div>
+                      </div>
+
+                      <!-- Contact Set 2 (Pins 6, 7, 5) -->
+                      <div class="contact-tier tier-mid">
+                        <div class="pin-group-left">
+                          <div class="jack jack-red" data-id="RL1_6" data-label="RL1 (6 - COM2)"></div>
+                          <span class="pin-num">6</span>
+                        </div>
+                        <div class="switch-drawing">
+                          <svg viewBox="0 0 54 38" class="contact-svg">
+                            <line x1="0" y1="20" x2="28" y2="20" stroke="#1e293b" stroke-width="2.2"/>
+                            <!-- Moving armature blade -->
+                            <line x1="28" y1="20" x2="48" y2="6" stroke="#1e293b" stroke-width="2.5" id="arm-rl1-2" class="switch-blade-arm"/>
+                            <!-- NC contact 7 terminal -->
+                            <line x1="48" y1="6" x2="48" y2="10" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="48" y1="6" x2="54" y2="6" stroke="#1e293b" stroke-width="2.2"/>
+                            <!-- NO contact 5 open terminal -->
+                            <line x1="32" y1="28" x2="54" y2="28" stroke="#1e293b" stroke-width="2.2"/>
+                            <!-- Central vertical dashed mechanical link line -->
+                            <line x1="36" y1="0" x2="36" y2="38" stroke="#1e293b" stroke-width="2.5" stroke-dasharray="6, 5"/>
+                          </svg>
+                        </div>
+                        <div class="pin-group-right">
+                          <div class="pin-sub">
+                            <span class="pin-num">7</span>
+                            <div class="jack jack-white" data-id="RL1_7" data-label="RL1 (7 - NC2)"></div>
+                          </div>
+                          <div class="pin-sub">
+                            <span class="pin-num">5</span>
+                            <div class="jack jack-yellow" data-id="RL1_5" data-label="RL1 (5 - NO2)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Coil Row (Pins 8, 1 and Box RL1 24VDC) -->
+                      <div class="relay-coil-tier">
+                        <div class="coil-pin-col">
+                          <span class="pin-num">8</span>
+                          <div class="jack jack-red" data-id="RL1_8" data-label="RL1 (8 - Coil +)"></div>
+                          <span class="polarity-tag">+</span>
+                        </div>
+                        <div class="coil-box-container">
+                          <div class="coil-lead-line left-lead"></div>
+                          <div class="coil-rect-box">
+                            <span class="coil-title">RL1</span>
+                            <span class="coil-volt">24VDC</span>
+                          </div>
+                          <div class="coil-lead-line right-lead"></div>
+                        </div>
+                        <div class="coil-pin-col">
+                          <span class="pin-num">1</span>
+                          <div class="jack jack-blue" data-id="RL1_1" data-label="RL1 (1 - Coil -)"></div>
+                          <span class="polarity-tag">-</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Relay RL2 (K2) - 100% Identical to Photo Pinout -->
+                  <div class="relay-unit" id="unit-k2">
+                    <div class="relay-window">
+                      <div class="relay-coil-body">
+                        <span class="relay-name">RL2</span>
+                        <span class="relay-led" id="led-k2"></span>
+                      </div>
+                    </div>
+                    
+                    <div class="relay-faceplate-graphic">
+                      <!-- Contact Set 1 (Pins 3, 2, 4) -->
+                      <div class="contact-tier tier-top">
+                        <div class="pin-group-left">
+                          <div class="jack jack-red" data-id="RL2_3" data-label="RL2 (3 - COM1)"></div>
+                          <span class="pin-num">3</span>
+                        </div>
+                        <div class="switch-drawing">
+                          <svg viewBox="0 0 54 38" class="contact-svg">
+                            <line x1="0" y1="20" x2="28" y2="20" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="28" y1="20" x2="48" y2="6" stroke="#1e293b" stroke-width="2.5" id="arm-rl2-1" class="switch-blade-arm"/>
+                            <line x1="48" y1="6" x2="48" y2="10" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="48" y1="6" x2="54" y2="6" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="32" y1="28" x2="54" y2="28" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="36" y1="0" x2="36" y2="38" stroke="#1e293b" stroke-width="2.5" stroke-dasharray="6, 5"/>
+                          </svg>
+                        </div>
+                        <div class="pin-group-right">
+                          <div class="pin-sub">
+                            <span class="pin-num">2</span>
+                            <div class="jack jack-white" data-id="RL2_2" data-label="RL2 (2 - NC1)"></div>
+                          </div>
+                          <div class="pin-sub">
+                            <span class="pin-num">4</span>
+                            <div class="jack jack-yellow" data-id="RL2_4" data-label="RL2 (4 - NO1)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Rating & Central Dashed Line -->
+                      <div class="relay-rating-row">
+                        <span class="rating-text">5A/250VAC</span>
+                        <div class="center-dashed-line"></div>
+                      </div>
+
+                      <!-- Contact Set 2 (Pins 6, 7, 5) -->
+                      <div class="contact-tier tier-mid">
+                        <div class="pin-group-left">
+                          <div class="jack jack-red" data-id="RL2_6" data-label="RL2 (6 - COM2)"></div>
+                          <span class="pin-num">6</span>
+                        </div>
+                        <div class="switch-drawing">
+                          <svg viewBox="0 0 54 38" class="contact-svg">
+                            <line x1="0" y1="20" x2="28" y2="20" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="28" y1="20" x2="48" y2="6" stroke="#1e293b" stroke-width="2.5" id="arm-rl2-2" class="switch-blade-arm"/>
+                            <line x1="48" y1="6" x2="48" y2="10" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="48" y1="6" x2="54" y2="6" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="32" y1="28" x2="54" y2="28" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="36" y1="0" x2="36" y2="38" stroke="#1e293b" stroke-width="2.5" stroke-dasharray="6, 5"/>
+                          </svg>
+                        </div>
+                        <div class="pin-group-right">
+                          <div class="pin-sub">
+                            <span class="pin-num">7</span>
+                            <div class="jack jack-white" data-id="RL2_7" data-label="RL2 (7 - NC2)"></div>
+                          </div>
+                          <div class="pin-sub">
+                            <span class="pin-num">5</span>
+                            <div class="jack jack-yellow" data-id="RL2_5" data-label="RL2 (5 - NO2)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Coil Row (Pins 8, 1 and Box RL2 24VDC) -->
+                      <div class="relay-coil-tier">
+                        <div class="coil-pin-col">
+                          <span class="pin-num">8</span>
+                          <div class="jack jack-red" data-id="RL2_8" data-label="RL2 (8 - Coil +)"></div>
+                          <span class="polarity-tag">+</span>
+                        </div>
+                        <div class="coil-box-container">
+                          <div class="coil-lead-line left-lead"></div>
+                          <div class="coil-rect-box">
+                            <span class="coil-title">RL2</span>
+                            <span class="coil-volt">24VDC</span>
+                          </div>
+                          <div class="coil-lead-line right-lead"></div>
+                        </div>
+                        <div class="coil-pin-col">
+                          <span class="pin-num">1</span>
+                          <div class="jack jack-blue" data-id="RL2_1" data-label="RL2 (1 - Coil -)"></div>
+                          <span class="polarity-tag">-</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Relay RL3 (Matching Image media_1792947386969_e0f60c87.png exactly) -->
+                  <div class="relay-unit" id="unit-k3">
+                    <div class="relay-window">
+                      <div class="relay-coil-body">
+                        <span class="relay-name">RL3</span>
+                        <span class="relay-led" id="led-k3"></span>
+                      </div>
+                    </div>
+                    
+                    <div class="relay-faceplate-graphic">
+                      <!-- Contact Set 1 (Pins 3, 2, 4) -->
+                      <div class="contact-tier tier-top">
+                        <div class="pin-group-left">
+                          <div class="jack jack-red" data-id="RL3_3" data-label="RL3 (3 - COM1)"></div>
+                          <span class="pin-num">3</span>
+                        </div>
+                        <div class="switch-drawing">
+                          <svg viewBox="0 0 54 38" class="contact-svg">
+                            <line x1="0" y1="20" x2="28" y2="20" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="28" y1="20" x2="48" y2="6" stroke="#1e293b" stroke-width="2.5" id="arm-rl3-1" class="switch-blade-arm"/>
+                            <line x1="48" y1="6" x2="48" y2="10" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="48" y1="6" x2="54" y2="6" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="32" y1="28" x2="54" y2="28" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="36" y1="0" x2="36" y2="38" stroke="#1e293b" stroke-width="2.5" stroke-dasharray="6, 5"/>
+                          </svg>
+                        </div>
+                        <div class="pin-group-right">
+                          <div class="pin-sub">
+                            <span class="pin-num">2</span>
+                            <div class="jack jack-white" data-id="RL3_2" data-label="RL3 (2 - NC1)"></div>
+                          </div>
+                          <div class="pin-sub">
+                            <span class="pin-num">4</span>
+                            <div class="jack jack-yellow" data-id="RL3_4" data-label="RL3 (4 - NO1)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Rating & Central Dashed Line -->
+                      <div class="relay-rating-row">
+                        <span class="rating-text">5A/250VAC</span>
+                        <div class="center-dashed-line"></div>
+                      </div>
+
+                      <!-- Contact Set 2 (Pins 6, 7, 5) -->
+                      <div class="contact-tier tier-mid">
+                        <div class="pin-group-left">
+                          <div class="jack jack-red" data-id="RL3_6" data-label="RL3 (6 - COM2)"></div>
+                          <span class="pin-num">6</span>
+                        </div>
+                        <div class="switch-drawing">
+                          <svg viewBox="0 0 54 38" class="contact-svg">
+                            <line x1="0" y1="20" x2="28" y2="20" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="28" y1="20" x2="48" y2="6" stroke="#1e293b" stroke-width="2.5" id="arm-rl3-2" class="switch-blade-arm"/>
+                            <line x1="48" y1="6" x2="48" y2="10" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="48" y1="6" x2="54" y2="6" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="32" y1="28" x2="54" y2="28" stroke="#1e293b" stroke-width="2.2"/>
+                            <line x1="36" y1="0" x2="36" y2="38" stroke="#1e293b" stroke-width="2.5" stroke-dasharray="6, 5"/>
+                          </svg>
+                        </div>
+                        <div class="pin-group-right">
+                          <div class="pin-sub">
+                            <span class="pin-num">7</span>
+                            <div class="jack jack-white" data-id="RL3_7" data-label="RL3 (7 - NC2)"></div>
+                          </div>
+                          <div class="pin-sub">
+                            <span class="pin-num">5</span>
+                            <div class="jack jack-yellow" data-id="RL3_5" data-label="RL3 (5 - NO2)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Coil Row (Pins 8, 1 and Box RL3 24VDC) -->
+                      <div class="relay-coil-tier">
+                        <div class="coil-pin-col">
+                          <span class="pin-num">8</span>
+                          <div class="jack jack-red" data-id="RL3_8" data-label="RL3 (8 - Coil +)"></div>
+                          <span class="polarity-tag">+</span>
+                        </div>
+                        <div class="coil-box-container">
+                          <div class="coil-lead-line left-lead"></div>
+                          <div class="coil-rect-box">
+                            <span class="coil-title">RL3</span>
+                            <span class="coil-volt">24VDC</span>
+                          </div>
+                          <div class="coil-lead-line right-lead"></div>
+                        </div>
+                        <div class="coil-pin-col">
+                          <span class="pin-num">1</span>
+                          <div class="jack jack-blue" data-id="RL3_1" data-label="RL3 (1 - Coil -)"></div>
+                          <span class="polarity-tag">-</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom GND (-V) Bus Rail -->
+                <div class="bus-rail bottom-bus">
+                  <div class="bus-line">
+                    <div class="jack jack-blue" data-id="RLY_GND_1" data-label="Relay (-V 1)"></div>
+                    <div class="jack jack-blue" data-id="RLY_GND_2" data-label="Relay (-V 2)"></div>
+                    <div class="jack jack-blue" data-id="RLY_GND_3" data-label="Relay (-V 3)"></div>
+                    <div class="jack jack-blue" data-id="RLY_GND_4" data-label="Relay (-V 4)"></div>
+                    <div class="jack jack-blue" data-id="RLY_GND_5" data-label="Relay (-V 5)"></div>
+                  </div>
+                  <div class="bus-footer-labels">
+                    <span class="bus-tag">-V</span>
+                    <span class="module-code">TPAK.A4000</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Module 2: Standard TPA Buttons Module (BUTTONS MODULE - As in Photo 3 & 4) -->
+              <div class="hardware-module module-buttons" id="mod-buttons">
+                <div class="module-header">
+                  <div class="brand">TPA</div>
+                  <div class="title">BUTTONS MODULE</div>
+                </div>
+
+                <!-- Top VCC (+V) Bus Rail -->
+                <div class="bus-rail top-bus">
+                  <span class="bus-tag">+V</span>
+                  <div class="bus-line">
+                    <div class="jack jack-red" data-id="BTN_VCC_1" data-label="Button (+V 1)"></div>
+                    <div class="jack jack-red" data-id="BTN_VCC_2" data-label="Button (+V 2)"></div>
+                    <div class="jack jack-red" data-id="BTN_VCC_3" data-label="Button (+V 3)"></div>
+                    <div class="jack jack-red" data-id="BTN_VCC_4" data-label="Button (+V 4)"></div>
+                    <div class="jack jack-red" data-id="BTN_VCC_5" data-label="Button (+V 5)"></div>
+                  </div>
+                </div>
+
+                <div class="buttons-container">
+                  <!-- PB1: Red Button (STOP) - Identical to Photo media_1792948144168_59686b0c.png -->
+                  <div class="button-unit" id="unit-btn-stop">
+                    <button class="push-btn btn-physical-stop" id="phys-btn-stop">
+                      <span>PB1</span>
+                    </button>
+                    
+                    <div class="btn-faceplate-graphic">
+                      <!-- Actuator Bracket [|] -->
+                      <div class="btn-symbol-header">
+                        <span class="btn-id-label">PB1</span>
+                        <svg viewBox="0 0 44 24" class="btn-actuator-svg">
+                          <path d="M 6,4 L 38,4 M 6,4 L 6,12 M 22,4 L 22,12 M 38,4 L 38,12" stroke="#0f172a" stroke-width="2.2" stroke-linecap="square" fill="none"/>
+                          <line x1="22" y1="12" x2="22" y2="24" stroke="#0f172a" stroke-width="2.2" stroke-dasharray="4, 3"/>
+                        </svg>
+                      </div>
+
+                      <!-- Main Switch Diagram: C, NC, NO -->
+                      <div class="btn-switch-scheme">
+                        <!-- Left: C jack with C label above -->
+                        <div class="terminal-c-col">
+                          <span class="scheme-letter">C</span>
+                          <div class="jack jack-red" data-id="PB1_C" data-label="PB1 (C)"></div>
+                        </div>
+
+                        <!-- Center: Switch Blade SVG -->
+                        <div class="switch-arm-svg-box">
+                          <svg viewBox="0 0 50 56" class="btn-switch-svg">
+                            <!-- Dashed line continuation -->
+                            <line x1="22" y1="0" x2="22" y2="28" stroke="#0f172a" stroke-width="2.2" stroke-dasharray="4, 3"/>
+                            <!-- Line from C -->
+                            <line x1="0" y1="42" x2="16" y2="42" stroke="#0f172a" stroke-width="2.2"/>
+                            <!-- Moving switch blade -->
+                            <line x1="16" y1="42" x2="44" y2="18" stroke="#0f172a" stroke-width="2.5" id="btn-blade-pb1" class="btn-blade-arm"/>
+                            <!-- NC contact hook -->
+                            <line x1="44" y1="18" x2="44" y2="24" stroke="#0f172a" stroke-width="2.2"/>
+                            <line x1="44" y1="18" x2="50" y2="18" stroke="#0f172a" stroke-width="2.2"/>
+                            <!-- NO contact open terminal -->
+                            <line x1="32" y1="42" x2="50" y2="42" stroke="#0f172a" stroke-width="2.2"/>
+                          </svg>
+                        </div>
+
+                        <!-- Right: NC on top, NO on bottom -->
+                        <div class="terminal-nc-no-col">
+                          <div class="terminal-subgroup">
+                            <span class="scheme-letter">NC</span>
+                            <div class="jack jack-white" data-id="PB1_NC" data-label="PB1 (NC)"></div>
+                          </div>
+                          <div class="terminal-subgroup">
+                            <span class="scheme-letter">NO</span>
+                            <div class="jack jack-yellow" data-id="PB1_NO" data-label="PB1 (NO)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="btn-rating-tag">1A/24VDC</div>
+
+                      <!-- Built-in Lamp 24VDC -->
+                      <div class="lamp-block">
+                        <div class="lamp-symbol-box">
+                          <div class="jack jack-red" data-id="PB1_LP" data-label="PB1 Đèn (+)"></div>
+                          <div class="lamp-circle" id="lamp-pb1">
+                            <span class="lamp-cross">&#10005;</span>
+                          </div>
+                          <div class="jack jack-blue" data-id="PB1_LN" data-label="PB1 Đèn (-)"></div>
+                        </div>
+                        <span class="lamp-lbl">24VDC</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- PB2: Yellow Button (RESET) - Identical to Photo media_1792948144168_59686b0c.png -->
+                  <div class="button-unit" id="unit-btn-spare">
+                    <button class="push-btn btn-physical-yellow" id="phys-btn-yellow">
+                      <span>PB2</span>
+                    </button>
+
+                    <div class="btn-faceplate-graphic">
+                      <!-- Actuator Bracket [|] -->
+                      <div class="btn-symbol-header">
+                        <span class="btn-id-label">PB2</span>
+                        <svg viewBox="0 0 44 24" class="btn-actuator-svg">
+                          <path d="M 6,4 L 38,4 M 6,4 L 6,12 M 22,4 L 22,12 M 38,4 L 38,12" stroke="#0f172a" stroke-width="2.2" stroke-linecap="square" fill="none"/>
+                          <line x1="22" y1="12" x2="22" y2="24" stroke="#0f172a" stroke-width="2.2" stroke-dasharray="4, 3"/>
+                        </svg>
+                      </div>
+
+                      <!-- Main Switch Diagram: C, NC, NO -->
+                      <div class="btn-switch-scheme">
+                        <div class="terminal-c-col">
+                          <span class="scheme-letter">C</span>
+                          <div class="jack jack-red" data-id="PB2_C" data-label="PB2 (C)"></div>
+                        </div>
+
+                        <div class="switch-arm-svg-box">
+                          <svg viewBox="0 0 50 56" class="btn-switch-svg">
+                            <line x1="22" y1="0" x2="22" y2="28" stroke="#0f172a" stroke-width="2.2" stroke-dasharray="4, 3"/>
+                            <line x1="0" y1="42" x2="16" y2="42" stroke="#0f172a" stroke-width="2.2"/>
+                            <line x1="16" y1="42" x2="44" y2="18" stroke="#0f172a" stroke-width="2.5" id="btn-blade-pb2" class="btn-blade-arm"/>
+                            <line x1="44" y1="18" x2="44" y2="24" stroke="#0f172a" stroke-width="2.2"/>
+                            <line x1="44" y1="18" x2="50" y2="18" stroke="#0f172a" stroke-width="2.2"/>
+                            <line x1="32" y1="42" x2="50" y2="42" stroke="#0f172a" stroke-width="2.2"/>
+                          </svg>
+                        </div>
+
+                        <div class="terminal-nc-no-col">
+                          <div class="terminal-subgroup">
+                            <span class="scheme-letter">NC</span>
+                            <div class="jack jack-white" data-id="PB2_NC" data-label="PB2 (NC)"></div>
+                          </div>
+                          <div class="terminal-subgroup">
+                            <span class="scheme-letter">NO</span>
+                            <div class="jack jack-yellow" data-id="PB2_NO" data-label="PB2 (NO)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="btn-rating-tag">1A/24VDC</div>
+
+                      <!-- Built-in Lamp 24VDC -->
+                      <div class="lamp-block">
+                        <div class="lamp-symbol-box">
+                          <div class="jack jack-red" data-id="PB2_LP" data-label="PB2 Đèn (+)"></div>
+                          <div class="lamp-circle" id="lamp-pb2">
+                            <span class="lamp-cross">&#10005;</span>
+                          </div>
+                          <div class="jack jack-blue" data-id="PB2_LN" data-label="PB2 Đèn (-)"></div>
+                        </div>
+                        <span class="lamp-lbl">24VDC</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- PB3: Green Button (START) - Identical to Photo media_1792948144168_59686b0c.png -->
+                  <div class="button-unit" id="unit-btn-start">
+                    <button class="push-btn btn-physical-start" id="phys-btn-start">
+                      <span>PB3</span>
+                    </button>
+
+                    <div class="btn-faceplate-graphic">
+                      <!-- Actuator Bracket [|] -->
+                      <div class="btn-symbol-header">
+                        <span class="btn-id-label">PB3</span>
+                        <svg viewBox="0 0 44 24" class="btn-actuator-svg">
+                          <path d="M 6,4 L 38,4 M 6,4 L 6,12 M 22,4 L 22,12 M 38,4 L 38,12" stroke="#0f172a" stroke-width="2.2" stroke-linecap="square" fill="none"/>
+                          <line x1="22" y1="12" x2="22" y2="24" stroke="#0f172a" stroke-width="2.2" stroke-dasharray="4, 3"/>
+                        </svg>
+                      </div>
+
+                      <!-- Main Switch Diagram: C, NC, NO -->
+                      <div class="btn-switch-scheme">
+                        <div class="terminal-c-col">
+                          <span class="scheme-letter">C</span>
+                          <div class="jack jack-red" data-id="PB3_C" data-label="PB3 (C)"></div>
+                        </div>
+
+                        <div class="switch-arm-svg-box">
+                          <svg viewBox="0 0 50 56" class="btn-switch-svg">
+                            <line x1="22" y1="0" x2="22" y2="28" stroke="#0f172a" stroke-width="2.2" stroke-dasharray="4, 3"/>
+                            <line x1="0" y1="42" x2="16" y2="42" stroke="#0f172a" stroke-width="2.2"/>
+                            <line x1="16" y1="42" x2="44" y2="18" stroke="#0f172a" stroke-width="2.5" id="btn-blade-pb3" class="btn-blade-arm"/>
+                            <line x1="44" y1="18" x2="44" y2="24" stroke="#0f172a" stroke-width="2.2"/>
+                            <line x1="44" y1="18" x2="50" y2="18" stroke="#0f172a" stroke-width="2.2"/>
+                            <line x1="32" y1="42" x2="50" y2="42" stroke="#0f172a" stroke-width="2.2"/>
+                          </svg>
+                        </div>
+
+                        <div class="terminal-nc-no-col">
+                          <div class="terminal-subgroup">
+                            <span class="scheme-letter">NC</span>
+                            <div class="jack jack-white" data-id="PB3_NC" data-label="PB3 (NC)"></div>
+                          </div>
+                          <div class="terminal-subgroup">
+                            <span class="scheme-letter">NO</span>
+                            <div class="jack jack-yellow" data-id="PB3_NO" data-label="PB3 (NO)"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="btn-rating-tag">1A/24VDC</div>
+
+                      <!-- Built-in Lamp 24VDC -->
+                      <div class="lamp-block">
+                        <div class="lamp-symbol-box">
+                          <div class="jack jack-red" data-id="PB3_LP" data-label="PB3 Đèn (+)"></div>
+                          <div class="lamp-circle" id="lamp-pb3">
+                            <span class="lamp-cross">&#10005;</span>
+                          </div>
+                          <div class="jack jack-blue" data-id="PB3_LN" data-label="PB3 Đèn (-)"></div>
+                        </div>
+                        <span class="lamp-lbl">24VDC</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom GND (-V) Bus Rail -->
+                <div class="bus-rail bottom-bus">
+                  <div class="bus-line">
+                    <div class="jack jack-blue" data-id="BTN_GND_1" data-label="Button (-V 1)"></div>
+                    <div class="jack jack-blue" data-id="BTN_GND_2" data-label="Button (-V 2)"></div>
+                    <div class="jack jack-blue" data-id="BTN_GND_3" data-label="Button (-V 3)"></div>
+                    <div class="jack jack-blue" data-id="BTN_GND_4" data-label="Button (-V 4)"></div>
+                    <div class="jack jack-blue" data-id="BTN_GND_5" data-label="Button (-V 5)"></div>
+                  </div>
+                  <div class="bus-footer-labels">
+                    <span class="bus-tag">-V</span>
+                    <span class="module-code">TPAK.A3000</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Module 3: Buzzer & Lamp Module (BUZZ LAMP MODULE - Matching Photo 2) -->
+              <div class="hardware-module module-buzz-lamp" id="mod-buzz-lamp">
+                <div class="module-header">
+                  <span class="brand">TPA</span>
+                  <div class="title">BUZZ LAMP MODULE</div>
+                </div>
+
+                <!-- Top VCC (+V) Bus Rail (5 Red jacks matching photo) -->
+                <div class="bus-rail top-bus buzz-bus">
+                  <span class="bus-tag">+V</span>
+                  <div class="bus-line">
+                    <div class="jack jack-red" data-id="BUZZ_VCC_1" data-label="Module Đèn/Còi (+V 1)"></div>
+                    <div class="jack jack-red" data-id="BUZZ_VCC_2" data-label="Module Đèn/Còi (+V 2)"></div>
+                    <div class="jack jack-red" data-id="BUZZ_VCC_3" data-label="Module Đèn/Còi (+V 3)"></div>
+                    <div class="jack jack-red" data-id="BUZZ_VCC_4" data-label="Module Đèn/Còi (+V 4)"></div>
+                    <div class="jack jack-red" data-id="BUZZ_VCC_5" data-label="Module Đèn/Còi (+V 5)"></div>
+                  </div>
+                </div>
+
+                <!-- Buzz Lamp Grid (2 Rows x 4 Columns) -->
+                <div class="buzz-lamp-body">
+                  <!-- ROW 1 -->
+                  <div class="buzz-lamp-row">
+                    <!-- Col 1: Red Lamp 1 (Schematic top, Lamp bottom) -->
+                    <div class="buzz-item lamp-col">
+                      <div class="lamp-schematic-unit top-schematic">
+                        <div class="schematic-labels">
+                          <span class="sign">+</span>
+                          <span class="volts">24VDC</span>
+                          <span class="sign">-</span>
+                        </div>
+                        <div class="schematic-terminals">
+                          <div class="jack jack-red" data-id="LAMP1_POS" data-label="Đèn Đỏ 1 (+)"></div>
+                          <div class="lamp-symbol-circle"><span class="cross">✕</span></div>
+                          <div class="jack jack-blue" data-id="LAMP1_NEG" data-label="Đèn Đỏ 1 (-)"></div>
+                        </div>
+                      </div>
+                      <div class="pilot-lamp-socket">
+                        <div class="pilot-lamp-lens lamp-red" id="pilot-lamp-1">
+                          <div class="lens-reflection"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 2: Yellow Lamp 1 (Schematic top, Lamp bottom) -->
+                    <div class="buzz-item lamp-col">
+                      <div class="lamp-schematic-unit top-schematic">
+                        <div class="schematic-labels">
+                          <span class="sign">+</span>
+                          <span class="volts">24VDC</span>
+                          <span class="sign">-</span>
+                        </div>
+                        <div class="schematic-terminals">
+                          <div class="jack jack-red" data-id="LAMP2_POS" data-label="Đèn Vàng 1 (+)"></div>
+                          <div class="lamp-symbol-circle"><span class="cross">✕</span></div>
+                          <div class="jack jack-blue" data-id="LAMP2_NEG" data-label="Đèn Vàng 1 (-)"></div>
+                        </div>
+                      </div>
+                      <div class="pilot-lamp-socket">
+                        <div class="pilot-lamp-lens lamp-yellow" id="pilot-lamp-2">
+                          <div class="lens-reflection"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 3: Green Lamp 1 (Schematic top, Lamp bottom) -->
+                    <div class="buzz-item lamp-col">
+                      <div class="lamp-schematic-unit top-schematic">
+                        <div class="schematic-labels">
+                          <span class="sign">+</span>
+                          <span class="volts">24VDC</span>
+                          <span class="sign">-</span>
+                        </div>
+                        <div class="schematic-terminals">
+                          <div class="jack jack-red" data-id="LAMP3_POS" data-label="Đèn Xanh 1 (+)"></div>
+                          <div class="lamp-symbol-circle"><span class="cross">✕</span></div>
+                          <div class="jack jack-blue" data-id="LAMP3_NEG" data-label="Đèn Xanh 1 (-)"></div>
+                        </div>
+                      </div>
+                      <div class="pilot-lamp-socket">
+                        <div class="pilot-lamp-lens lamp-green" id="pilot-lamp-3">
+                          <div class="lens-reflection"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 4: Buzzer Physical Sounder Disc (Row 1) -->
+                    <div class="buzz-item buzzer-sounder-col">
+                      <div class="buzzer-faceplate-disc" id="buzzer-sounder-face">
+                        <div class="buzzer-inner-rings">
+                          <div class="ring-rib ring-3"></div>
+                          <div class="ring-rib ring-2"></div>
+                          <div class="ring-rib ring-1"></div>
+                          <div class="buzzer-sound-holes">
+                            <span></span><span></span><span></span>
+                          </div>
+                        </div>
+                        <div class="sound-wave-ripple" id="buzzer-wave"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ROW 2 -->
+                  <div class="buzz-lamp-row">
+                    <!-- Col 1: Red Lamp 2 (Lamp top, Schematic bottom) -->
+                    <div class="buzz-item lamp-col">
+                      <div class="pilot-lamp-socket">
+                        <div class="pilot-lamp-lens lamp-red" id="pilot-lamp-4">
+                          <div class="lens-reflection"></div>
+                        </div>
+                      </div>
+                      <div class="lamp-schematic-unit bottom-schematic">
+                        <div class="schematic-terminals">
+                          <div class="jack jack-red" data-id="LAMP4_POS" data-label="Đèn Đỏ 2 (+)"></div>
+                          <div class="lamp-symbol-circle"><span class="cross">✕</span></div>
+                          <div class="jack jack-blue" data-id="LAMP4_NEG" data-label="Đèn Đỏ 2 (-)"></div>
+                        </div>
+                        <div class="schematic-labels">
+                          <span class="sign">+</span>
+                          <span class="volts">24VDC</span>
+                          <span class="sign">-</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 2: Yellow Lamp 2 (Lamp top, Schematic bottom) -->
+                    <div class="buzz-item lamp-col">
+                      <div class="pilot-lamp-socket">
+                        <div class="pilot-lamp-lens lamp-yellow" id="pilot-lamp-5">
+                          <div class="lens-reflection"></div>
+                        </div>
+                      </div>
+                      <div class="lamp-schematic-unit bottom-schematic">
+                        <div class="schematic-terminals">
+                          <div class="jack jack-red" data-id="LAMP5_POS" data-label="Đèn Vàng 2 (+)"></div>
+                          <div class="lamp-symbol-circle"><span class="cross">✕</span></div>
+                          <div class="jack jack-blue" data-id="LAMP5_NEG" data-label="Đèn Vàng 2 (-)"></div>
+                        </div>
+                        <div class="schematic-labels">
+                          <span class="sign">+</span>
+                          <span class="volts">24VDC</span>
+                          <span class="sign">-</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 3: Green Lamp 2 (Lamp top, Schematic bottom) -->
+                    <div class="buzz-item lamp-col">
+                      <div class="pilot-lamp-socket">
+                        <div class="pilot-lamp-lens lamp-green" id="pilot-lamp-6">
+                          <div class="lens-reflection"></div>
+                        </div>
+                      </div>
+                      <div class="lamp-schematic-unit bottom-schematic">
+                        <div class="schematic-terminals">
+                          <div class="jack jack-red" data-id="LAMP6_POS" data-label="Đèn Xanh 2 (+)"></div>
+                          <div class="lamp-symbol-circle"><span class="cross">✕</span></div>
+                          <div class="jack jack-blue" data-id="LAMP6_NEG" data-label="Đèn Xanh 2 (-)"></div>
+                        </div>
+                        <div class="schematic-labels">
+                          <span class="sign">+</span>
+                          <span class="volts">24VDC</span>
+                          <span class="sign">-</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 4: Buzzer Schematic & Terminals (Row 2) -->
+                    <div class="buzz-item buzzer-schematic-col">
+                      <div class="buzzer-schematic-symbol">
+                        <svg viewBox="0 0 36 28" class="buzzer-symbol-svg">
+                          <path d="M 8 6 L 28 6 L 24 16 L 12 16 Z" fill="none" stroke="#263238" stroke-width="2"/>
+                          <line x1="18" y1="16" x2="18" y2="24" stroke="#263238" stroke-width="2"/>
+                          <line x1="6" y1="24" x2="30" y2="24" stroke="#263238" stroke-width="2"/>
+                        </svg>
+                      </div>
+                      <div class="buzzer-terminals-row">
+                        <div class="jack jack-red" data-id="BUZZ_POS" data-label="Còi Báo Buzzer (+)"></div>
+                        <span class="volts">24VDC</span>
+                        <div class="jack jack-blue" data-id="BUZZ_NEG" data-label="Còi Báo Buzzer (-)"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom GND (-V) Bus Rail (5 Blue jacks matching photo) -->
+                <div class="bus-rail bottom-bus buzz-bus">
+                  <div class="bus-line">
+                    <div class="jack jack-blue" data-id="BUZZ_GND_1" data-label="Module Đèn/Còi (-V 1)"></div>
+                    <div class="jack jack-blue" data-id="BUZZ_GND_2" data-label="Module Đèn/Còi (-V 2)"></div>
+                    <div class="jack jack-blue" data-id="BUZZ_GND_3" data-label="Module Đèn/Còi (-V 3)"></div>
+                    <div class="jack jack-blue" data-id="BUZZ_GND_4" data-label="Module Đèn/Còi (-V 4)"></div>
+                    <div class="jack jack-blue" data-id="BUZZ_GND_5" data-label="Module Đèn/Còi (-V 5)"></div>
+                  </div>
+                  <div class="bus-footer-labels">
+                    <span class="bus-tag">-V</span>
+                    <span class="module-code">TPAK A8000</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Module 4: 24VDC Power Supply Module (24VDC POWER MODULE - As in Photo 2) -->
+              <div class="hardware-module module-power" id="mod-power">
+                <div class="module-header">
+                  <div class="brand">TPA</div>
+                  <div class="title">24VDC POWER MODULE</div>
+                </div>
+
+                <!-- Top VCC (+V) Bus Rail -->
+                <div class="bus-rail top-bus">
+                  <span class="bus-tag">+V</span>
+                  <div class="bus-line">
+                    <div class="jack jack-red" data-id="PWR_VCC_1" data-label="Nguồn (+V 1)"></div>
+                    <div class="jack jack-red" data-id="PWR_VCC_2" data-label="Nguồn (+V 2)"></div>
+                    <div class="jack jack-red" data-id="PWR_VCC_3" data-label="Nguồn (+V 3)"></div>
+                  </div>
+                </div>
+
+                <div class="power-body">
+                  <div class="power-left-column">
+                    <!-- Analog Voltmeter (Matching Photo 2) -->
+                    <div class="analog-meter">
+                      <div class="meter-face">
+                        <div class="meter-scale">0 &nbsp; 10 &nbsp; 20 &nbsp; 30V</div>
+                        <div class="meter-needle" id="voltmeter-needle"></div>
+                        <div class="meter-pivot-v">V</div>
+                      </div>
+                      <div class="meter-label">DC VOLTMETER</div>
+                    </div>
+
+                    <!-- Main Switch & AC Socket -->
+                    <div class="power-switches-group">
+                      <div class="rocker-box">
+                        <button class="rocker-switch" id="main-power-switch">
+                          <span class="switch-state-text" id="power-switch-text">OFF</span>
+                        </button>
+                        <span class="switch-desc">VDC ON</span>
+                      </div>
+                      <div class="ac-socket-box">
+                        <div class="socket-plug-shape"></div>
+                        <span class="socket-desc">POWER 100+240VAC/50Hz - F/2A</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- UNO POWER Phoenix Contact Unit (Matching Photo 2) -->
+                  <div class="uno-power-block">
+                    <div class="uno-header">
+                      <span class="uno-brand">UNO POWER</span>
+                      <span class="uno-ord">Ord.No.2902993</span>
+                    </div>
+                    <div class="uno-screw-terminals top-screws">
+                      <span>2.1 +</span>
+                      <span>2.2 +</span>
+                      <span>2.3 -</span>
+                      <span>2.4 -</span>
+                    </div>
+                    <div class="uno-body-info">
+                      <div class="uno-output-spec">
+                        Output DC<br><strong>24V 100W</strong>
+                      </div>
+                      <div class="uno-dc-ok">
+                        <span class="dc-ok-dot" id="uno-dc-ok-dot"></span> DC OK
+                      </div>
+                      <div class="phoenix-logo">🗲</div>
+                    </div>
+                    <div class="uno-screw-terminals bottom-screws">
+                      <span>L 1.1</span>
+                      <span>N 1.2</span>
+                      <small>Input AC 100-240V</small>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom GND (-V) Bus Rail -->
+                <div class="bus-rail bottom-bus">
+                  <div class="bus-line">
+                    <div class="jack jack-blue" data-id="PWR_GND_1" data-label="Nguồn (-V 1)"></div>
+                    <div class="jack jack-blue" data-id="PWR_GND_2" data-label="Nguồn (-V 2)"></div>
+                    <div class="jack jack-blue" data-id="PWR_GND_3" data-label="Nguồn (-V 3)"></div>
+                  </div>
+                  <div class="bus-footer-labels">
+                    <span class="bus-tag">-V</span>
+                    <span class="module-code">OUTPUT: 24VDC/4.2A &bull; TPAK.A7100</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rack-frame-bar bottom-rail"></div>
+            </div>
+
+            <!-- MIDDLE SECTION: ALUMINUM GROOVE PROFILE (Bảng nhôm định hình rãnh) -->
+            <div class="aluminum-slotted-wall">
+              <!-- Pressure Switch Sensor Block S1 mounted on left profile -->
+              <div class="hardware-component pressure-switch-unit" id="unit-pressure-switch">
+                <div class="comp-title">CÔNG TẮC ÁP SUẤT S1</div>
+                <div class="pswitch-housing">
+                  <div class="pswitch-dial">
+                    <span class="dial-val" id="pswitch-setting-val">30 bar (3.0 MPa)</span>
+                    <span class="pswitch-state-led" id="led-pswitch"></span>
+                  </div>
+                  <div class="pswitch-terminals">
+                    <div class="term-item">
+                      <div class="jack jack-yellow" data-id="S1_1" data-label="S1 (Cực 1)"></div>
+                      <span class="jack-code">1</span>
+                    </div>
+                    <div class="term-item">
+                      <div class="jack jack-yellow" data-id="S1_2" data-label="S1 (Cực 2)"></div>
+                      <span class="jack-code">2</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Proximity Sensor Unit B1 (Matching Photo 1) -->
+              <div class="hardware-component proximity-sensor-unit" id="unit-proximity-sensor">
+                <div class="comp-title">CẢM BIẾN TIỆM CẬN B1 (PROXIMITY SENSOR)</div>
+                <div class="prox-mounting-bracket">
+                  <div class="prox-top-assembly">
+                    <!-- Sensor Barrel & Glowing Amber LED -->
+                    <div class="prox-sensor-barrel">
+                      <div class="prox-sensing-tip"></div>
+                      <div class="prox-barrel-housing">
+                        <span class="prox-model-tag">B1 &bull; PNP NO</span>
+                        <span class="prox-state-led" id="led-proximity"></span>
+                      </div>
+                    </div>
+                    <!-- Looped Sensor Cable -->
+                    <div class="prox-cable-loop">
+                      <svg viewBox="0 0 50 36" class="cable-loop-svg">
+                        <path d="M 40 4 C 48 18, 8 26, 16 12 C 20 4, 34 8, 36 32" fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <!-- 2 Hex Cap Screws on Right Plate -->
+                    <div class="prox-hex-screws">
+                      <span class="hex-screw"></span>
+                      <span class="hex-screw"></span>
+                    </div>
+                  </div>
+
+                  <!-- 3 Jack Terminals: Red (+), Yellow (OUT), Blue (-) -->
+                  <div class="prox-terminals-row">
+                    <div class="term-col">
+                      <div class="jack jack-red" data-id="PROX_VCC" data-label="Cảm biến B1 (+24V)"></div>
+                      <span class="jack-code">+</span>
+                    </div>
+                    <div class="term-col">
+                      <div class="jack jack-yellow" data-id="PROX_OUT" data-label="Cảm biến B1 (Ngõ ra OUT)"></div>
+                      <span class="jack-code">OUT</span>
+                    </div>
+                    <div class="term-col">
+                      <div class="jack jack-blue" data-id="PROX_GND" data-label="Cảm biến B1 (0V/GND)"></div>
+                      <span class="jack-code">-</span>
+                    </div>
+                  </div>
+                  <div class="prox-badge" id="prox-status-badge">CHỜ PHÔI/PISTON</div>
+                </div>
+              </div>
+
+              <!-- Solenoid Valve Control Block Y (Van điện từ 4/2) -->
+              <div class="hardware-component solenoid-valve-unit" id="unit-solenoid-valve">
+                <div class="comp-title">VAN ĐIỆN TỪ 4/2 (CUỘN Y)</div>
+                <div class="valve-housing">
+                  <div class="solenoid-coil-head">
+                    <span class="coil-tag">Cuộn Y (24VDC)</span>
+                    <span class="solenoid-led" id="led-solenoid-y"></span>
+                    <div class="coil-terminals">
+                      <div class="term-item">
+                        <div class="jack jack-red" data-id="Y_1" data-label="Cuộn Y (Cực 1)"></div>
+                        <span class="jack-code">+</span>
+                      </div>
+                      <div class="term-item">
+                        <div class="jack jack-black" data-id="Y_2" data-label="Cuộn Y (Cực 2)"></div>
+                        <span class="jack-code">-</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="valve-hydraulic-spool">
+                    <span class="valve-state-badge" id="valve-state-badge">VỊ TRÍ 0 (LÒ XO)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- LOWER SECTION: HYDRAULIC BENCH (Xi lanh, Đồng hồ áp suất, Van tiết lưu) -->
+            <div class="hydraulic-bench-bottom">
+              <!-- Pressure Gauge (Đồng hồ đo áp suất thực) -->
+              <div class="hydraulic-component pressure-gauge-unit" id="unit-gauge">
+                <div class="comp-label">ÁP SUẤT HỆ THỐNG</div>
+                <div class="gauge-dial-container">
+                  <svg viewBox="0 0 120 120" class="gauge-svg">
+                    <!-- Gauge dial background -->
+                    <circle cx="60" cy="60" r="54" fill="#ffffff" stroke="#2b2d42" stroke-width="4"/>
+                    <!-- Tick marks -->
+                    <circle cx="60" cy="60" r="46" fill="none" stroke="#8d99ae" stroke-width="2" stroke-dasharray="2, 5"/>
+                    <!-- 30 bar marker red arc -->
+                    <path d="M 82 28 A 46 46 0 0 1 100 48" fill="none" stroke="#e63946" stroke-width="4"/>
+                    <!-- Needle -->
+                    <g id="gauge-needle-group" transform="rotate(-120, 60, 60)">
+                      <line x1="60" y1="60" x2="60" y2="18" stroke="#d90429" stroke-width="2.5" stroke-linecap="round"/>
+                      <circle cx="60" cy="60" r="5" fill="#2b2d42"/>
+                    </g>
+                    <text x="60" y="80" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">bar / MPa</text>
+                  </svg>
+                  <div class="gauge-digital-readout">
+                    <span id="gauge-pressure-num">0.0</span> <small>bar</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Flow Control / Throttle Valve (Van tiết lưu) -->
+              <div class="hydraulic-component throttle-valve-unit" id="unit-throttle">
+                <div class="comp-label">VAN TIẾT LƯU 1 CHIỀU</div>
+                <div class="throttle-knob-wrapper">
+                  <div class="knob-dial" id="throttle-knob">
+                    <div class="knob-pointer"></div>
+                  </div>
+                  <div class="knob-labels">
+                    <span>DEC</span>
+                    <span id="throttle-speed-text">Tốc độ: 50%</span>
+                    <span>INC</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hydraulic Double-Acting Cylinder (Xi lanh tác dụng kép có phôi ép) -->
+              <div class="hydraulic-component cylinder-assembly-unit" id="unit-cylinder">
+                <div class="comp-label">XI LANH THỦY LỰC TÁC DỤNG KÉP & ĐỒ GÁ ÉP</div>
+                
+                <div class="cylinder-stage">
+                  <!-- Cylinder Barrel & Piston Rod -->
+                  <div class="cylinder-rig">
+                    <div class="cylinder-barrel">
+                      <!-- Piston head inside barrel -->
+                      <div class="piston-puck" id="piston-puck"></div>
+                      <div class="chamber-oil chamber-left" id="oil-left"></div>
+                      <div class="chamber-oil chamber-right" id="oil-right"></div>
+                    </div>
+                    <!-- Piston Rod extending out -->
+                    <div class="piston-rod" id="piston-rod">
+                      <div class="press-die-tool" id="press-die">
+                        <span>ĐẦU ÉP</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Workpiece Fixture (Phôi chi tiết uốn / ép) -->
+                  <div class="workpiece-fixture" id="workpiece-fixture">
+                    <div class="workpiece-block" id="workpiece-block">
+                      <span>CHI TIẾT ÉP</span>
+                    </div>
+                    <div class="fixture-base">Gá chặn chịu lực</div>
+                  </div>
+                </div>
+
+                <div class="cylinder-status-row">
+                  <span id="piston-motion-state">TRẠNG THÁI: CO VÀO HẾT (SẴN SÀNG)</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modals / Guide Popups (Guaranteed Hidden by Default) -->
+    <div id="modal-wire-guide" class="modal-backdrop hidden" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 id="modal-title">Danh sách các bước đấu dây chuẩn (Bài 4)</h3>
+          <button id="btn-close-modal" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body-content">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+    <!-- Landscape Orientation Prompt for Mobile Phones (Yêu cầu quay ngang) -->
+    <div id="landscape-prompt" class="landscape-prompt-overlay" style="display: none;">
+      <div class="landscape-prompt-card">
+        <div class="phone-rotate-anim">
+          <div class="phone-graphic">
+            <div class="phone-screen-inner"></div>
+          </div>
+          <span class="rotate-curved-arrow">🔄</span>
+        </div>
+        <h3>VUI LÒNG QUAY NGANG ĐIỆN THOẠI</h3>
+        <p>Bàn thực hành mô phỏng thủy lực cần màn hình nằm ngang (Landscape) để hiển thị đầy đủ thiết bị và cắm dây thực hành thuận tiện nhất.</p>
+        <button id="btn-dismiss-landscape" class="btn-dismiss-prompt">Vẫn tiếp tục xem dọc</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
