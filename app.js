@@ -405,8 +405,8 @@ const IDEAL_LAB_4_WIRES = [
   { fromId: 'RL2_2', toId: 'RL1_8', color: '#2a9d8f', desc: 'Từ chân thường đóng NC 2 của RL2 vào cuộn hút RL1 chân 8 (+)' },
   { fromId: 'RL1_1', toId: 'RLY_GND_1', color: '#1d3557', desc: 'Nối chân âm cuộn RL1 (chân 1) về hàng GND (-V)' },
   { fromId: 'Y_2', toId: 'BTN_GND_5', color: '#1d3557', desc: 'Nối chân âm Cuộn van Y (-) về hàng GND (-V)' },
-  { fromId: 'PWR_VCC_1', toId: 'S1_1', color: '#e63946', desc: 'Cấp nguồn +24V từ hàng VCC vào Công tắc áp suất S1 (cực 1)' },
-  { fromId: 'S1_2', toId: 'RL2_8', color: '#f4a261', desc: 'Từ đầu ra S1 (cực 2) vào cuộn hút RL2 chân 8 (+)' },
+  { fromId: 'PWR_VCC_1', toId: 'S1_1', color: '#e63946', desc: 'Cấp nguồn +24V từ hàng VCC vào Công tắc áp suất S1 (cực V+)' },
+  { fromId: 'S1_2', toId: 'RL2_8', color: '#f4a261', desc: 'Từ đầu ra S1 (cực V-) vào cuộn hút RL2 chân 8 (+)' },
   { fromId: 'RL2_1', toId: 'RLY_GND_2', color: '#1d3557', desc: 'Nối chân âm cuộn RL2 (chân 1) về hàng GND (-V)' },
 ];
 
@@ -532,10 +532,17 @@ function buildNetworkGraph(extraSwitches = {}) {
     addEdge('RL3_6', 'RL3_7');
   }
 
-  // 7. Pressure Switch S1 (Contact 1-2):
+  // 7. Pressure Switch S1 (Contact 1-2 / V+ to V-):
   if (extraSwitches.s1NO) {
     addEdge('S1_1', 'S1_2');
+    addEdge('S1_VCC', 'S1_GND');
+    addEdge('S1_VPLUS', 'S1_VMINUS');
   }
+  // Pin aliases for S1
+  addEdge('S1_1', 'S1_VCC');
+  addEdge('S1_1', 'S1_VPLUS');
+  addEdge('S1_2', 'S1_GND');
+  addEdge('S1_2', 'S1_VMINUS');
 
   // 8. Proximity Sensor B1 (When powered & target detected, internal PNP connects +V to OUT):
   if (extraSwitches.proxActive) {
@@ -642,9 +649,9 @@ function validateLab4Circuit() {
 
   if (!k2HasPlus) {
     report.valid = false;
-    report.errors.push('❌ Cuộn RL2 (chân 8 +) chưa được nối qua Công tắc áp suất S1 về hàng +V.');
+    report.errors.push('❌ Cuộn RL2 (chân 8 +) chưa được nối qua Công tắc áp suất S1 (V+ / V-) về hàng +V.');
   } else {
-    report.successes.push('✓ Nhánh Công tắc áp suất S1 cấp nguồn cho cuộn RL2 (chân 8 +) chính xác.');
+    report.successes.push('✓ Nhánh Công tắc áp suất S1 (V+ / V-) cấp nguồn cho cuộn RL2 (chân 8 +) chính xác.');
   }
 
   if (!k2HasGnd) {
